@@ -216,7 +216,7 @@ public class LoginActivity extends AppCompatActivity {
 
             String loginResult = null;
             try {
-                loginResult = handler.makePostCall(parameter, "http://" + mServer + "/inventaris/public/api/login");
+                loginResult = handler.makePostCall(parameter, handler.LINK_LOGIN);
             } catch (IOException e) {
                 connectionProblem = true;
                 return false;
@@ -276,8 +276,8 @@ public class LoginActivity extends AppCompatActivity {
             String mrmartResult = null;
             String satuanResult = null;
             try {
-                mrmartResult = handler.makeGetCall("http://" + mServer + "/inventaris/public/api/mrmart");
-                satuanResult = handler.makeGetCall("http://" + mServer + "/inventaris/public/api/satuan");
+                mrmartResult = handler.makeGetCall(handler.LINK_MRMART_GET);
+                satuanResult = handler.makeGetCall(handler.LINK_SATUAN_GET);
             } catch (IOException e) {
                 connectionProblem = true;
                 return false;

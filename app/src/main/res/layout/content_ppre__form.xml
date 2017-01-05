@@ -27,12 +27,21 @@
             android:textSize="18sp" />
     </LinearLayout>
 
+    <!-- Login progress -->
+    <ProgressBar
+        android:id="@+id/ppre_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
+        android:id="@+id/ppre_form_view"
         >
 
         <LinearLayout

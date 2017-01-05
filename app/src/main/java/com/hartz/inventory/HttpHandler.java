@@ -32,18 +32,26 @@ import java.util.LinkedHashMap;
 public class HttpHandler {
 
     private static final String TAG = HttpHandler.class.getSimpleName();
+    public static final String LINK_PPRE_CREATE = "/inventaris/public/api/ppre";
+    public static final String LINK_MRMART_GET = "/inventaris/public/api/mrmart";
+    public static final String LINK_SATUAN_GET = "/inventaris/public/api/satuan";
+    public static final String LINK_LOGIN = "/inventaris/public/api/login";
+
+
+
     SharedPreferences preferences;
 
 
     public HttpHandler(Context context) {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
+
     }
 
 
     public String makePostCall(LinkedHashMap<String, Object> params, String urlAddress) throws IOException {
 
             String server = preferences.getString("ServerName", "");
-            URL url = new URL(urlAddress);
+            URL url = new URL("http://"+server+urlAddress);
             Log.v("connecting to", url.toString());
             StringBuilder postData = new StringBuilder();
             for (LinkedHashMap.Entry<String, Object> param : params.entrySet()) {
@@ -70,7 +78,9 @@ public class HttpHandler {
     public String makePostJSONCall(String reqUrl, JSONObject content) {
 
         try {
-            URL url = new URL(reqUrl);
+            String server = preferences.getString("ServerName", "");
+            URL url = new URL("http://"+server+reqUrl);
+
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
             con.setDoOutput(true);
@@ -114,8 +124,9 @@ public class HttpHandler {
 
     public String makeGetCall(String reqUrl) throws IOException {
         String response = null;
+        String server = preferences.getString("ServerName", "");
+        URL url = new URL("http://"+server+reqUrl);
 
-            URL url = new URL(reqUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             // read the response
