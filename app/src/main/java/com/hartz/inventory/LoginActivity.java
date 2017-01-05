@@ -7,11 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
-import android.content.Loader;
-import android.database.Cursor;
 import android.os.AsyncTask;
-import android.os.Build.VERSION;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -25,14 +21,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hartz.inventory.model.Mrmart;
 import com.hartz.inventory.model.User;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -40,13 +32,7 @@ import java.util.Objects;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -60,7 +46,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_login);
+
+
         // Set up the login form.
         mServerView = (EditText) findViewById(R.id.server);
         mUserView = (EditText) findViewById(R.id.user);
@@ -86,6 +75,18 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        //logged in automatically if prefs exist
+        //TODO add remember me button
+        if(SharedPrefsHelper.isLoggedIn(getApplicationContext())){
+            showProgress(true);
+            mAuthTask = new UserLoginTask(
+                    SharedPrefsHelper.readPrefs(SharedPrefsHelper.SERVER_PREFS, getApplicationContext()),
+                    SharedPrefsHelper.readPrefs(SharedPrefsHelper.NAME_PREFS, getApplicationContext()),
+                    SharedPrefsHelper.readPrefs(SharedPrefsHelper.PASSWORD_PREFS, getApplicationContext()));
+            mAuthTask.execute((Void) null);
+        }
+
     }
 
 
@@ -203,12 +204,12 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("ServerName",mServer);
-            editor.apply();
 
-                // Simulate network access.
+            SharedPrefsHelper.saveToPrefs(SharedPrefsHelper.SERVER_PREFS, mServer, getApplicationContext());
+            SharedPrefsHelper.saveToPrefs(SharedPrefsHelper.PASSWORD_PREFS, mPassword, getApplicationContext());
+            SharedPrefsHelper.saveToPrefs(SharedPrefsHelper.NAME_PREFS, mEmail, getApplicationContext());
+
+            //access the network
             HttpHandler handler = new HttpHandler(getApplicationContext());
             LinkedHashMap<String, Object> parameter = new LinkedHashMap<>();
             parameter.put("username", mEmail);

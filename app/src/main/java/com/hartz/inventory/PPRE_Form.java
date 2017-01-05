@@ -137,6 +137,7 @@ public class PPRE_Form extends AppCompatActivity {
 
     protected void submitRecord(View v){
 
+        //TODO validation of each entries
         JSONObject object = new JSONObject();
         try {
             object.put("token", SharedPrefsHelper.readPrefs(SharedPrefsHelper.TOKEN_PREFS, getApplicationContext()));
@@ -250,7 +251,7 @@ public class PPRE_Form extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Permintaan Pembelian Ditambahkan",Toast.LENGTH_SHORT).show();
                 finish();
             }
-
+            //TODO jika gagal
 //            } else {
 //                if(connectionProblem){
 //                    mPasswordView.setError(getString(R.string.error_network_problem));

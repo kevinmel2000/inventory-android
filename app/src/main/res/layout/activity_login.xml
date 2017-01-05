@@ -40,7 +40,7 @@
                     android:hint="@string/prompt_server"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:text="192.168.5.6"
+                    android:text="10.10.46.157"
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
