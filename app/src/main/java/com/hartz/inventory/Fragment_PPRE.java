@@ -4,11 +4,13 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,12 +24,9 @@ import android.widget.Toast;
 
 import com.hartz.inventory.model.PPRE;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.logging.Handler;
 
 /**
  * Created by Webmaster on 1/5/2017.
@@ -38,8 +37,10 @@ private View fragmentPPREView, mProgressView;
     //generate list
     ArrayList<PPRE> list;
     String loginResult = null;
-    LoadPPRETask ppreTask;
+    LoadPPRETask ppreLoadTask;
+    DeletePPRETask ppreDeleteTask;
     ListView lView;
+    PPREAdapter adapter;
 
 
     // The onCreateView method is called when Fragment should create its View object hierarchy,
@@ -56,17 +57,23 @@ private View fragmentPPREView, mProgressView;
         lView = (ListView)view.findViewById(R.id.fragment_ppre_listview);
         fragmentPPREView = (View)view.findViewById(R.id.fragment_ppre_layout);
         mProgressView = (View)view.findViewById(R.id.fragment_ppre_process);
-        showProgress(true);
-        ppreTask = new LoadPPRETask(SharedPrefsHelper.readPrefs(SharedPrefsHelper.NAME_PREFS,
-                getActivity().getApplicationContext()));
-        ppreTask.execute((Void)null);
+
     }
 
+    @Override
+    public void onResume() {
+        showProgress(true);
+        ppreLoadTask = new LoadPPRETask(SharedPrefsHelper.readPrefs(SharedPrefsHelper.NAME_PREFS,
+                getActivity().getApplicationContext()));
+        ppreLoadTask.execute((Void)null);
+
+        super.onResume();
+    }
 
     private void loadPPREList() {
         list = PPRE.getFromJSON(loginResult);
         //instantiate custom adapter
-        PPREAdapter adapter = new PPREAdapter(list, getActivity().getApplicationContext());
+        adapter = new PPREAdapter(list, getActivity().getApplicationContext());
         lView.setAdapter(adapter);
     }
 
@@ -157,7 +164,73 @@ private View fragmentPPREView, mProgressView;
 
         @Override
         protected void onCancelled() {
-            ppreTask = null;
+            ppreLoadTask = null;
+            showProgress(false);
+        }
+    }
+
+
+
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+    public class DeletePPRETask extends AsyncTask<Void, Void, Boolean> {
+
+        private String id;
+        private int position;
+        private boolean connectionProblem;
+
+        DeletePPRETask(String id, int position) {
+            this.id = id;this.position = position;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // Simulate network access.
+            //access the network
+            HttpHandler handler = new HttpHandler(getActivity());
+            LinkedHashMap<String, Object> parameter = new LinkedHashMap<>();
+            parameter.put("token", SharedPrefsHelper.readPrefs(SharedPrefsHelper.TOKEN_PREFS, getActivity().getApplicationContext()));
+            parameter.put("_method", "delete");
+            Log.v("token = ", SharedPrefsHelper.readPrefs(SharedPrefsHelper.TOKEN_PREFS, getActivity().getApplicationContext()));
+            String loginResult = null;
+            try {
+                loginResult = handler.makePostCall(parameter, handler.LINK_DELETE_PPRE+"/"+id);
+            } catch (IOException e) {
+                connectionProblem = true;
+                return false;
+            }
+            Log.v("POST RESULT", loginResult);
+
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+//
+            showProgress(false);
+//
+            if (success) {
+                Toast.makeText(getActivity(), "Data dihapus", Toast.LENGTH_SHORT).show();
+                list.remove(position);
+                adapter.notifyDataSetChanged();
+            }
+            //TODO jika gagal
+//            } else {
+//                if(connectionProblem){
+//                    mPasswordView.setError(getString(R.string.error_network_problem));
+//                }else{
+//                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+//                }
+//
+//                mPasswordView.requestFocus();
+//            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            ppreLoadTask = null;
             showProgress(false);
         }
     }
@@ -216,8 +289,34 @@ private View fragmentPPREView, mProgressView;
                 @Override
                 public void onClick(View v) {
                     //TODO delete and edit button
-                    list.remove(position); //or some other task
-                    notifyDataSetChanged();
+
+                    /** convert builder to dialog */
+                    AlertDialog alert = new AlertDialog.Builder(getActivity()).create();
+
+                    /** disable cancel outside touch */
+                    alert.setCanceledOnTouchOutside(true);
+                    /** disable cancel on press back button */
+                    alert.setCancelable(true);
+                    alert.setMessage("Yakin mau menghapus?");
+                    alert.setButton(AlertDialog.BUTTON_POSITIVE, "Hapus", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+                            showProgress(true);
+                            ppreDeleteTask = new DeletePPRETask(list.get(position).getId(), position);
+                            ppreDeleteTask.execute((Void)null);
+                            dialog.dismiss();
+
+                        }
+                    });
+                    alert.setButton(AlertDialog.BUTTON_NEGATIVE, "Batal", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    alert.show();
+
                 }
             });
             editBtn.setOnClickListener(new View.OnClickListener(){

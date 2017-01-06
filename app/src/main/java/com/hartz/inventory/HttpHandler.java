@@ -33,10 +33,12 @@ public class HttpHandler {
 
     private static final String TAG = HttpHandler.class.getSimpleName();
     public static final String LINK_PPRE_CREATE = "/inventaris/public/api/ppre";
+    
     public static final String LINK_MRMART_GET = "/inventaris/public/api/mrmart";
     public static final String LINK_SATUAN_GET = "/inventaris/public/api/satuan";
     public static final String LINK_LOGIN = "/inventaris/public/api/login";
     public static final String LINK_PPRE_BY_USER = "/inventaris/public/api/ppreh/user/";
+    public static final String LINK_DELETE_PPRE = "/inventaris/public/api/ppre";
 
 
     SharedPreferences preferences;
