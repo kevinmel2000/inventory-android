@@ -8,5 +8,18 @@
         android:textSize="18sp"
         android:id="@+id/list_ppre_item_id"
         />
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_ppre_item_delete"
+        />
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_ppre_item_edit"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_ppre_item_items"/>
 </RelativeLayout>
