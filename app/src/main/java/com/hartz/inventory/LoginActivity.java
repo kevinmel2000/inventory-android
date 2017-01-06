@@ -48,8 +48,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
-
-
         // Set up the login form.
         mServerView = (EditText) findViewById(R.id.server);
         mUserView = (EditText) findViewById(R.id.user);

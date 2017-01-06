@@ -36,7 +36,7 @@ public class HttpHandler {
     public static final String LINK_MRMART_GET = "/inventaris/public/api/mrmart";
     public static final String LINK_SATUAN_GET = "/inventaris/public/api/satuan";
     public static final String LINK_LOGIN = "/inventaris/public/api/login";
-
+    public static final String LINK_PPRE_BY_USER = "/inventaris/public/api/ppreh/user/";
 
 
     SharedPreferences preferences;
@@ -126,8 +126,8 @@ public class HttpHandler {
         String response = null;
         String server = preferences.getString("ServerName", "");
         URL url = new URL("http://"+server+reqUrl);
-
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        Log.v("connecting to", url.toString());
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             // read the response
             InputStream in = new BufferedInputStream(conn.getInputStream());

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.hartz.inventory.SharedPrefsHelper;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,9 +17,7 @@ public class User {
     private String name;
     private String role;
     private String token;
-    public final static String NAME_PREFS = "UserName";
-    public final static String ROLE_PREFS = "RoleName";
-    public final static String TOKEN_PREFS = "UserToken";
+
 
     /**
      * create new user object from json
@@ -33,9 +33,9 @@ public class User {
             token = userObject.getString("token");
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = preferences.edit();
-            editor.putString(NAME_PREFS, name);
-            editor.putString(ROLE_PREFS, role);
-            editor.putString(TOKEN_PREFS, token);
+            editor.putString(SharedPrefsHelper.NAME_PREFS, name);
+            editor.putString(SharedPrefsHelper.ROLE_PREFS, role);
+            editor.putString(SharedPrefsHelper.TOKEN_PREFS, token);
             editor.apply();
             return true;
         } catch (JSONException e) {

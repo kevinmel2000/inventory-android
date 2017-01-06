@@ -22,6 +22,8 @@ public class Mrmart{
     private String groupID;
     private String articleID;
     private String articleName;
+    private int quantity;
+    private String satuan;
 
     public final static String MRMART_GROUPID = "PPRE_GROUP";
     public final static String MRMART_ARTICLEID = "PPRE_ART";
@@ -39,6 +41,38 @@ public class Mrmart{
         this.groupID = groupID;
         this.articleID = articleID;
         this.articleName = articleName;
+    }
+
+    /**
+     *
+     * @param groupID
+     * @param articleID
+     * @param articleName
+     * @param quantity
+     * @param satuan
+     */
+    public Mrmart(String groupID, String articleID, String articleName, int quantity, String satuan) {
+        this.groupID = groupID;
+        this.articleID = articleID;
+        this.articleName = articleName;
+        this.quantity = quantity;
+        this.satuan = satuan;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getSatuan() {
+        return satuan;
+    }
+
+    public void setSatuan(String satuan) {
+        this.satuan = satuan;
     }
 
     /**
