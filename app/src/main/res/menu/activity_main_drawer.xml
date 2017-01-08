@@ -4,19 +4,19 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_ssjde"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/pengiriman_barang" />
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_ppre"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/permintaan_pembelian" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="User Menu">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_menu_share"
                 android:title="@string/logout" />
 

@@ -26,12 +26,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id="@+id/fragment_ppre_layout">
+        android:id="@+id/fragment_ppre_layout" >
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TODO: Existing LIST OVERHERE"/>
+            android:text="Daftar Permintaan Pembelian"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:gravity="left"
+            android:paddingLeft="5dp"
+            android:paddingBottom="4dp"
+            android:textColor="#ff0099cc"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:paddingBottom="5dp"
+            android:background="#2233bb"/>
 
         <ListView
             android:layout_width="match_parent"

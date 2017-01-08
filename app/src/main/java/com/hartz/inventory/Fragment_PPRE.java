@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -323,7 +324,9 @@ private View fragmentPPREView, mProgressView;
                 @Override
                 public void onClick(View v) {
                     //do something
-                    notifyDataSetChanged();
+                    Intent i = new Intent(getActivity(), PPRE_Form_Edit.class);
+                    i.putExtra("ppreObject", list.get(position));
+                    startActivity(i);
                 }
             });
 

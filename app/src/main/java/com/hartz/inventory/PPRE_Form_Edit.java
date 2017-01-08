@@ -3,6 +3,7 @@ package com.hartz.inventory;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,10 +20,12 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.hartz.inventory.model.Mrmart;
+import com.hartz.inventory.model.PPRE;
 import com.hartz.inventory.model.Satuan;
 
 import org.json.JSONArray;
@@ -33,7 +36,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class PPRE_Form extends AppCompatActivity {
+public class PPRE_Form_Edit extends AppCompatActivity {
     ArrayList<Mrmart> mrmartArray;
     ArrayList<Satuan> satuanArray;
     ArrayAdapter<Mrmart> adapterMrmart;
@@ -44,8 +47,9 @@ public class PPRE_Form extends AppCompatActivity {
     ArrayList<EditText> editTextList;
     ArrayList<RelativeLayout> relativeLayoutList;
     LinearLayout linearLayout;
+    PPRE ppre;
 
-    private AddPPRETask addPPRETask = null;
+    private EditPPRETask editPPRETask = null;
     private View mProgressView;
     private View mLoginFormView;
 
@@ -54,6 +58,9 @@ public class PPRE_Form extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_ppre__form);
 
+        //receive ppre object to be edited
+        Intent i = getIntent();
+        ppre = (PPRE) i.getSerializableExtra("ppreObject");
 
         mProgressView = (ProgressBar)findViewById(R.id.ppre_progress);
         mLoginFormView = (View)findViewById(R.id.ppre_form_view);
@@ -82,8 +89,61 @@ public class PPRE_Form extends AppCompatActivity {
         //change the looks of our adapter satuan
         adapterSatuan.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        //add inital item
-        addItem();
+
+        //add existing items
+        addItem(ppre.getItemList());
+    }
+
+
+    protected void addItem(ArrayList<Mrmart> listMart){
+        for(int i = 0; i <listMart.size(); i++){
+            Mrmart mrmart = listMart.get(i);
+            View itemLayout = LayoutInflater.from(this).inflate(R.layout.content_ppre_form_item,null);
+
+            AutoCompleteTextView autoCompleteTextView =
+                    (AutoCompleteTextView)itemLayout.findViewById(R.id.ppre_form_autocomplete1);
+            autoCompleteTextView.setThreshold(2);
+            autoCompleteTextView.setAdapter(adapterMrmart);
+            int pos = adapterMrmart.getPosition(mrmart);
+            Log.v("adapter mrmart pos", pos+"");
+            Log.v("adapter length", adapterMrmart.getCount()+"");
+            autoCompleteTextView.setText(mrmart.toString());
+
+            autoCompleteTextViewList.add(autoCompleteTextView);
+
+            //to get selected index of autotextview, add it to the mrmart list
+            autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    int index = autoCompleteTextViewList.size()-1;
+                    mrMartList.set(index, (Mrmart) parent.getItemAtPosition(position));
+                }
+            });
+
+            //add null list for future reference
+            mrMartList.add(null);
+
+            Spinner spinner = (Spinner) itemLayout.findViewById(R.id.ppre_form_spinner1);
+            spinner.setAdapter(adapterSatuan);
+
+            pos = adapterSatuan.getPosition(new Satuan(mrmart.getSatuan()));
+            Log.v("adapter satuan pos", pos+"");
+            spinner.setSelection(pos);
+
+
+            spinnerList.add(spinner);
+
+            relativeLayoutList.add((RelativeLayout)itemLayout.findViewById(R.id.ppre_form_relativelayout));
+
+            ImageButton button = (ImageButton) itemLayout.findViewById(R.id.ppre_form_imagebutton);
+            button.setTag(spinnerList.size()-1);
+
+            EditText editText = (EditText) itemLayout.findViewById(R.id.ppre_form_edittext1);
+            editText.setText(mrmart.getQuantity()+"");
+            editTextList.add(editText);
+
+            linearLayout.addView(itemLayout);
+        }
     }
 
     protected void addItem(){
@@ -110,6 +170,7 @@ public class PPRE_Form extends AppCompatActivity {
 
         Spinner spinner = (Spinner) itemLayout.findViewById(R.id.ppre_form_spinner1);
         spinner.setAdapter(adapterSatuan);
+
         spinnerList.add(spinner);
 
         relativeLayoutList.add((RelativeLayout)itemLayout.findViewById(R.id.ppre_form_relativelayout));
@@ -137,15 +198,18 @@ public class PPRE_Form extends AppCompatActivity {
     }
 
     protected void submitRecord(View v){
-
         //validation of each entries
         boolean cancel = false;
         for(int i = 0; i < autoCompleteTextViewList.size(); i++){
             if(autoCompleteTextViewList.get(i).getVisibility() != AutoCompleteTextView.GONE) {
                 if (mrMartList.get(i) == null) {
-                    autoCompleteTextViewList.get(i).setError(getString(R.string.error_ppre_invalid_item));
-                    autoCompleteTextViewList.get(i).requestFocus();
-                    cancel = true;
+                    try {
+                        ppre.getItemList().get(i);
+                    }catch (IndexOutOfBoundsException e){
+                        autoCompleteTextViewList.get(i).setError(getString(R.string.error_ppre_invalid_item));
+                        autoCompleteTextViewList.get(i).requestFocus();
+                        cancel = true;
+                    }
                 }
 
                 if (TextUtils.isEmpty(editTextList.get(i).getText())) {
@@ -156,6 +220,7 @@ public class PPRE_Form extends AppCompatActivity {
             }
         }
 
+        //if valiidated
         if(cancel == false) {
             JSONObject object = new JSONObject();
             try {
@@ -167,10 +232,15 @@ public class PPRE_Form extends AppCompatActivity {
                     //if the component is visible (not deleted)
                     if (autoCompleteTextViewList.get(i).getVisibility() != AutoCompleteTextView.GONE) {
                         //jika sudah ada item yang dipilih
-                        if (mrMartList.get(i) != null) {
+                        if (!autoCompleteTextViewList.get(i).getText().equals("")) {
                             JSONObject entry = new JSONObject();
-                            entry.put(Mrmart.MRMART_ARTICLEID, mrMartList.get(i).getArticleID());
-                            entry.put(Mrmart.MRMART_GROUPID, mrMartList.get(i).getGroupID());
+                            Mrmart mrmart = mrMartList.get(i);
+                            if (mrmart == null) {
+                                mrmart = ppre.getItemList().get(i);
+                                Log.v("mrmart is null at", mrmart.getArticleID() + " index: " + i);
+                            }
+                            entry.put(Mrmart.MRMART_ARTICLEID, mrmart.getArticleID());
+                            entry.put(Mrmart.MRMART_GROUPID, mrmart.getGroupID());
                             entry.put(Mrmart.MRMART_QUANTITY, editTextList.get(i).getText());
                             Satuan s = (Satuan) spinnerList.get(i).getSelectedItem();
                             entry.put(Mrmart.MRMART_SATUAN, s.getSatuanID());
@@ -185,8 +255,8 @@ public class PPRE_Form extends AppCompatActivity {
 
             Log.v("message", object.toString());
             showProgress(true);
-            addPPRETask = new AddPPRETask(object.toString());
-            addPPRETask.execute((Void) null);
+            editPPRETask = new EditPPRETask(object.toString(), ppre.getId());
+            editPPRETask.execute((Void) null);
         }
     }
 
@@ -231,13 +301,14 @@ public class PPRE_Form extends AppCompatActivity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class AddPPRETask extends AsyncTask<Void, Void, Boolean> {
+    public class EditPPRETask extends AsyncTask<Void, Void, Boolean> {
 
         private final String jsonRequest;
+        private final String ppreId;
         private boolean connectionProblem;
 
-        AddPPRETask(String jsonRequest) {
-            this.jsonRequest = jsonRequest;
+        EditPPRETask(String jsonRequest, String ppreId) {
+            this.jsonRequest = jsonRequest;this.ppreId = ppreId;
         }
 
         @Override
@@ -248,11 +319,12 @@ public class PPRE_Form extends AppCompatActivity {
             HttpHandler handler = new HttpHandler(getApplicationContext());
             LinkedHashMap<String, Object> parameter = new LinkedHashMap<>();
             parameter.put("json", jsonRequest);
+            parameter.put("_method", "patch");
 
 
             String loginResult = null;
             try {
-                loginResult = handler.makePostCall(parameter, handler.LINK_PPRE_CREATE);
+                loginResult = handler.makePostCall(parameter, handler.LINK_PPRE_EDIT+"/"+ppreId);
             } catch (IOException e) {
                 connectionProblem = true;
                 return false;
@@ -268,7 +340,7 @@ public class PPRE_Form extends AppCompatActivity {
             showProgress(false);
 //
             if (success) {
-                Toast.makeText(getApplicationContext(), "Permintaan Pembelian Ditambahkan",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Permintaan Pembelian Dirubah",Toast.LENGTH_SHORT).show();
                 finish();
             }
             //TODO jika gagal
@@ -285,7 +357,7 @@ public class PPRE_Form extends AppCompatActivity {
 
         @Override
         protected void onCancelled() {
-            addPPRETask = null;
+            editPPRETask = null;
             showProgress(false);
         }
     }

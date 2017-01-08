@@ -4,13 +4,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Webmaster on 1/5/2017.
  */
 
-public class PPRE {
+public class PPRE implements Serializable{
     private String id;
     private String user;
     private ArrayList<Mrmart> itemList;

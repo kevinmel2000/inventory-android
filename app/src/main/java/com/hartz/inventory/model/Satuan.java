@@ -18,6 +18,9 @@ public class Satuan{
     private String satuanID;
     private String satuanName;
 
+    public Satuan(String satuanID){
+        this.satuanID = satuanID;
+    }
     public Satuan(String satuanID, String satuanName) {
         this.satuanID = satuanID;
         this.satuanName = satuanName;
@@ -69,4 +72,22 @@ public class Satuan{
         this.satuanName = satuanName;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Satuan satuan = (Satuan) o;
+
+        if (satuanID != null ? !satuanID.equals(satuan.satuanID) : satuan.satuanID != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = satuanID != null ? satuanID.hashCode() : 0;
+        return result;
+    }
 }

@@ -46,4 +46,14 @@ public class SharedPrefsHelper{
         if(prefs.getString(ROLE_PREFS, null) != null && prefs.getString(TOKEN_PREFS, null) != null) return true;
         return false;
     }
+
+    public static void logout(Context context){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove(SharedPrefsHelper.NAME_PREFS);
+        editor.remove(SharedPrefsHelper.ROLE_PREFS);
+        editor.remove(SharedPrefsHelper.TOKEN_PREFS);
+        editor.apply();
+        preferences = null;
+    }
 }

@@ -12,13 +12,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by hrtz on 12/29/2016.
  */
 
-public class Mrmart{
+public class Mrmart implements Serializable{
     private String groupID;
     private String articleID;
     private String articleName;
@@ -129,5 +130,25 @@ public class Mrmart{
     @Override
     public String toString() {
         return articleName +" ("+groupID+")";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Mrmart mrmart = (Mrmart) o;
+
+        if (groupID != null ? !groupID.equals(mrmart.groupID) : mrmart.groupID != null)
+            return false;
+        return articleID != null ? articleID.equals(mrmart.articleID) : mrmart.articleID == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = groupID != null ? groupID.hashCode() : 0;
+        result = 31 * result + (articleID != null ? articleID.hashCode() : 0);
+        return result;
     }
 }
