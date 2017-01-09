@@ -25,6 +25,7 @@ import com.hartz.inventory.model.User;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.logging.Handler;
 
 
 /**
@@ -274,17 +275,26 @@ public class LoginActivity extends AppCompatActivity {
 
             String mrmartResult = null;
             String satuanResult = null;
+            String mfgartResult = null;
+            String clientResult = null;
             try {
                 mrmartResult = handler.makeGetCall(handler.LINK_MRMART_GET);
+                mfgartResult = handler.makeGetCall(handler.LINK_MFGART_GET);
                 satuanResult = handler.makeGetCall(handler.LINK_SATUAN_GET);
+                clientResult = handler.makeGetCall(handler.LINK_SATUAN_GET);
             } catch (IOException e) {
                 connectionProblem = true;
                 return false;
             }
-            Log.v("POST RESULT", mrmartResult);
-            Log.v("POST RESULT", satuanResult);
-            SharedPrefsHelper.saveToPrefs(SharedPrefsHelper.MRMART_PREFS, mrmartResult, getApplicationContext());
-            SharedPrefsHelper.saveToPrefs(SharedPrefsHelper.SATUAN_PREFS, satuanResult, getApplicationContext());
+            SharedPrefsHelper.saveToPrefs(SharedPrefsHelper.MFGART_PREFS,
+                    mfgartResult, getApplicationContext());
+            SharedPrefsHelper.saveToPrefs(SharedPrefsHelper.MRMART_PREFS,
+                    mrmartResult, getApplicationContext());
+            SharedPrefsHelper.saveToPrefs(SharedPrefsHelper.SATUAN_PREFS,
+                    satuanResult, getApplicationContext());
+            SharedPrefsHelper.saveToPrefs(SharedPrefsHelper.CLIENT_PREFS,
+                    clientResult, getApplicationContext());
+
             return true;
         }
 

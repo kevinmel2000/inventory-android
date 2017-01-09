@@ -3,6 +3,7 @@ package com.hartz.inventory;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -14,8 +15,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.hartz.inventory.model.SSJDE;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +28,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), PPRE_Form.class);
-                startActivity(intent);
-            }
-        });
+        fab.setOnClickListener(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -72,6 +69,7 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -87,11 +85,13 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
         if (id == R.id.nav_ppre) {
-            // Handle the camera action
+            ft.replace(R.id.fragment_placeholder, new Fragment_PPRE());
         } else if (id == R.id.nav_ssjde) {
-
+            ft.replace(R.id.fragment_placeholder, new Fragment_SSJDE());
         }  else if (id == R.id.nav_logout) {
             SharedPrefsHelper.logout(getApplicationContext());
             Intent intent = new Intent(this, LoginActivity.class);
@@ -99,8 +99,25 @@ public class MainActivity extends AppCompatActivity
             finish();
         }
 
+        ft.commit();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        Fragment currentFragment = getSupportFragmentManager().
+                findFragmentById(R.id.fragment_placeholder);
+        if(currentFragment instanceof Fragment_PPRE){
+            Intent intent = new Intent(getApplicationContext(), PPRE_Form.class);
+            startActivity(intent);
+        }else{
+            Intent intent = new Intent(getApplicationContext(), SSJDE_Form.class);
+            startActivity(intent);
+        }
+
     }
 }

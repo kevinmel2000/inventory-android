@@ -16,6 +16,8 @@ public class SharedPrefsHelper{
     public final static String SATUAN_PREFS = "SatuanJson";
     public static final String SERVER_PREFS = "ServerName";
     public static final String PASSWORD_PREFS = "Password";
+    public static final String MFGART_PREFS = "MfgartJson";
+    public static final String CLIENT_PREFS = "ClientJson";
 
     public static void saveToPrefs(String key, String value, Context context){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

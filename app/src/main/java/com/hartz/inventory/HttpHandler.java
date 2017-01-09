@@ -40,6 +40,8 @@ public class HttpHandler {
     public static final String LINK_PPRE_BY_USER = "/inventaris/public/api/ppreh/user/";
     public static final String LINK_DELETE_PPRE = "/inventaris/public/api/ppre";
     public static final String LINK_PPRE_EDIT = "/inventaris/public/api/ppre";
+    public static final String LINK_SSJDE_CREATE = "/inventaris/public/api/ssjde";;
+    public static final String LINK_MFGART_GET = "/inventaris/public/api/mfgart";
 
 
     SharedPreferences preferences;

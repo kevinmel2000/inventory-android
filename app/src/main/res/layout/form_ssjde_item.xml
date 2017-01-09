@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ssjde_form_relativelayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="10dp">
+
+    <AutoCompleteTextView
+        android:id="@+id/ssjde_form_autocomplete1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:hint="Nama barang"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/ssjde_form_edittext1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/ssjde_form_autocomplete1"
+        android:hint="Quantity"
+        android:inputType="number" />
+
+    <ImageButton
+        android:id="@+id/ssjde_form_imagebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/ssjde_form_autocomplete1"
+        android:layout_gravity="right"
+        android:onClick="deleteRecord"
+        android:src="@drawable/ic_delete_forever_black_24dp" />
+
+    <Spinner
+        android:id="@+id/ssjde_form_spinner1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/ssjde_form_edittext1"
+        android:layout_toEndOf="@+id/ssjde_form_edittext1"
+        android:layout_toRightOf="@+id/ssjde_form_edittext1" />
+
+    <View
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_below="@id/ssjde_form_spinner1"
+        android:background="#00ffaa"
+        android:elevation="4dp"/>
+</RelativeLayout>
+

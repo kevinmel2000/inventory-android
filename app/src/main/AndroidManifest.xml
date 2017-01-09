@@ -28,10 +28,17 @@
             android:label="@string/title_activity_ppre__form"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
         <activity
+            android:name=".SSJDE_Form"
+            android:label="@string/title_activity_ssjde_form"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity
             android:name=".PPRE_Form_Edit"
             android:label="@string/title_activity_ppre__form_edit"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
-
+        <activity
+            android:name=".SSJDE_Form_Edit"
+            android:label="@string/title_activity_ssjde_form_edit"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

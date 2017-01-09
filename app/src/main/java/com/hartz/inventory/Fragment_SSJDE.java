@@ -23,25 +23,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hartz.inventory.model.PPRE;
+import com.hartz.inventory.model.SSJDE;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**
- * Created by Webmaster on 1/5/2017.
+ * Created by Webmaster on 1/9/2017.
  */
 
-public class Fragment_PPRE extends Fragment {
-    private View fragmentPPREView, mProgressView;
+public class Fragment_SSJDE extends Fragment {
+    private View fragmentSSJDEView, mProgressView;
     //generate list
-    ArrayList<PPRE> list;
+    ArrayList<SSJDE> list;
     String loginResult = null;
-    LoadPPRETask ppreLoadTask;
-    DeletePPRETask ppreDeleteTask;
+    Fragment_SSJDE.LoadSSJDETask ssjdeLoadTask;
+    Fragment_SSJDE.DeleteSSJDETask ssjdeDeleteTask;
     ListView lView;
-    PPREAdapter adapter;
+    Fragment_SSJDE.SSJDEAdapter adapter;
 
 
     // The onCreateView method is called when Fragment should create its View object hierarchy,
@@ -49,32 +49,32 @@ public class Fragment_PPRE extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
-        return inflater.inflate(R.layout.fragment_ppre, parent, false);
+        return inflater.inflate(R.layout.fragment_ssjde, parent, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         //handle listview and assign adapter
-        lView = (ListView)view.findViewById(R.id.fragment_ppre_listview);
-        fragmentPPREView = (View)view.findViewById(R.id.fragment_ppre_layout);
-        mProgressView = (View)view.findViewById(R.id.fragment_ppre_process);
-
+        lView = (ListView)view.findViewById(R.id.fragment_ssjde_listview);
+        fragmentSSJDEView = (View)view.findViewById(R.id.fragment_ssjde_layout);
+        mProgressView = (View)view.findViewById(R.id.fragment_ssjde_process);
     }
 
     @Override
     public void onResume() {
-        showProgress(true);
-        ppreLoadTask = new LoadPPRETask(SharedPrefsHelper.readPrefs(SharedPrefsHelper.NAME_PREFS,
-                getActivity().getApplicationContext()));
-        ppreLoadTask.execute((Void)null);
+//        showProgress(true);
+//        ssjdeLoadTask = new Fragment_SSJDE.LoadSSJDETask(
+//                SharedPrefsHelper.readPrefs(SharedPrefsHelper.NAME_PREFS,
+//                getActivity().getApplicationContext()));
+//        ssjdeLoadTask.execute((Void)null);
 
         super.onResume();
     }
 
-    private void loadPPREList() {
-        list = PPRE.getFromJSON(loginResult);
+    private void loadSSJDEList() {
+        list = SSJDE.getFromJSON(loginResult);
         //instantiate custom adapter
-        adapter = new PPREAdapter(list, getActivity().getApplicationContext());
+        adapter = new Fragment_SSJDE.SSJDEAdapter(list, getActivity().getApplicationContext());
         lView.setAdapter(adapter);
     }
 
@@ -89,12 +89,12 @@ public class Fragment_PPRE extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            fragmentPPREView.setVisibility(show ? View.GONE : View.VISIBLE);
-            fragmentPPREView.animate().setDuration(shortAnimTime).alpha(
+            fragmentSSJDEView.setVisibility(show ? View.GONE : View.VISIBLE);
+            fragmentSSJDEView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    fragmentPPREView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    fragmentSSJDEView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -110,7 +110,7 @@ public class Fragment_PPRE extends Fragment {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            fragmentPPREView.setVisibility(show ? View.GONE : View.VISIBLE);
+            fragmentSSJDEView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -118,12 +118,12 @@ public class Fragment_PPRE extends Fragment {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class LoadPPRETask extends AsyncTask<Void, Void, Boolean> {
+    public class LoadSSJDETask extends AsyncTask<Void, Void, Boolean> {
 
         private String username;
         private boolean connectionProblem;
 
-        LoadPPRETask(String username) {
+        LoadSSJDETask(String username) {
             this.username = username;
         }
 
@@ -149,7 +149,7 @@ public class Fragment_PPRE extends Fragment {
             showProgress(false);
 //
             if (success) {
-               loadPPREList();
+                loadSSJDEList();
             }
             //TODO jika gagal
 //            } else {
@@ -165,7 +165,7 @@ public class Fragment_PPRE extends Fragment {
 
         @Override
         protected void onCancelled() {
-            ppreLoadTask = null;
+            ssjdeLoadTask = null;
             showProgress(false);
         }
     }
@@ -176,13 +176,13 @@ public class Fragment_PPRE extends Fragment {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class DeletePPRETask extends AsyncTask<Void, Void, Boolean> {
+    public class DeleteSSJDETask extends AsyncTask<Void, Void, Boolean> {
 
         private String id;
         private int position;
         private boolean connectionProblem;
 
-        DeletePPRETask(String id, int position) {
+        DeleteSSJDETask(String id, int position) {
             this.id = id;this.position = position;
         }
 
@@ -231,18 +231,18 @@ public class Fragment_PPRE extends Fragment {
 
         @Override
         protected void onCancelled() {
-            ppreLoadTask = null;
+            ssjdeLoadTask = null;
             showProgress(false);
         }
     }
 
-    class PPREAdapter extends BaseAdapter implements ListAdapter {
-        private ArrayList<PPRE> list = new ArrayList<PPRE>();
+    class SSJDEAdapter extends BaseAdapter implements ListAdapter {
+        private ArrayList<SSJDE> list = new ArrayList<SSJDE>();
         private Context context;
 
 
 
-        public PPREAdapter(ArrayList<PPRE> list, Context context) {
+        public SSJDEAdapter(ArrayList<SSJDE> list, Context context) {
             this.list = list;
             this.context = context;
         }
@@ -272,19 +272,19 @@ public class Fragment_PPRE extends Fragment {
             View view = convertView;
             if (view == null) {
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(R.layout.list_ppre_item, null);
+                view = inflater.inflate(R.layout.list_ssjde_item, null);
             }
 
             //Handle TextView and display string from your list
-            TextView listItemText = (TextView)view.findViewById(R.id.list_ppre_item_id);
+            TextView listItemText = (TextView)view.findViewById(R.id.list_ssjde_item_id);
             listItemText.setText(list.get(position).getId());
 
-            TextView listItemDesc = (TextView)view.findViewById(R.id.list_ppre_item_items);
+            TextView listItemDesc = (TextView)view.findViewById(R.id.list_ssjde_item_items);
             listItemDesc.setText(list.get(position).itemListToString());
 
             //Handle buttons and add onClickListeners
-            ImageButton deleteBtn = (ImageButton)view.findViewById(R.id.list_ppre_item_delete);
-            ImageButton editBtn = (ImageButton)view.findViewById(R.id.list_ppre_item_edit);
+            ImageButton deleteBtn = (ImageButton)view.findViewById(R.id.list_ssjde_item_delete);
+            ImageButton editBtn = (ImageButton)view.findViewById(R.id.list_ssjde_item_edit);
 
             deleteBtn.setOnClickListener(new View.OnClickListener(){
                 @Override
@@ -303,8 +303,8 @@ public class Fragment_PPRE extends Fragment {
 
                         public void onClick(DialogInterface dialog, int which) {
                             showProgress(true);
-                            ppreDeleteTask = new DeletePPRETask(list.get(position).getId(), position);
-                            ppreDeleteTask.execute((Void)null);
+                            ssjdeDeleteTask = new Fragment_SSJDE.DeleteSSJDETask(list.get(position).getId(), position);
+                            ssjdeDeleteTask.execute((Void)null);
                             dialog.dismiss();
 
                         }
@@ -322,8 +322,8 @@ public class Fragment_PPRE extends Fragment {
                 @Override
                 public void onClick(View v) {
                     //do something
-                    Intent i = new Intent(getActivity(), PPRE_Form_Edit.class);
-                    i.putExtra("ppreObject", list.get(position));
+                    Intent i = new Intent(getActivity(), SSJDE_Form_Edit.class);
+                    i.putExtra("ssjdeObject", list.get(position));
                     startActivity(i);
                 }
             });

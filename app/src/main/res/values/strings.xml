@@ -27,7 +27,9 @@
     <string name="title_activity_ppre__form">PPRE_Form</string>
     <string name="title_activity_ppre__form_edit">PPRE Edit Form</string>
     <string name="error_ppre_invalid_item">Item tidak valid</string>
-    <string name="error_ppre_invalid_quantity">Jumlah harus diisi</string>
+    <string name="error_invalid_quantity">Jumlah harus diisi</string>
+    <string name="title_activity_ssjde_form">SSJDE Form</string>
+    <string name="title_activity_ssjde_form_edit">SSJDE Edit Form</string>
     <string-array name="spinner_items">
         <item>Kilogram</item>
         <item>Bungkus</item>

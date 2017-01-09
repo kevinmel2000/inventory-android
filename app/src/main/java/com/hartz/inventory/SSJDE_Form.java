@@ -22,7 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.hartz.inventory.model.Mrmart;
+import com.hartz.inventory.model.Mfgart;
 import com.hartz.inventory.model.Satuan;
 
 import org.json.JSONArray;
@@ -33,33 +33,39 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class PPRE_Form extends AppCompatActivity {
-    ArrayList<Mrmart> mrmartArray;
+/**
+ * Created by Webmaster on 1/9/2017.
+ */
+
+public class SSJDE_Form extends AppCompatActivity{
+
+    ArrayList<Mfgart> mfgartArray;
     ArrayList<Satuan> satuanArray;
-    ArrayAdapter<Mrmart> adapterMrmart;
+    ArrayAdapter<Mfgart> adapterMfgart;
     ArrayAdapter<Satuan> adapterSatuan;
-    ArrayList<Mrmart> mrMartList;
+    ArrayAdapter<Customer> customer;
+    ArrayList<Mfgart> mrMartList;
     ArrayList<AutoCompleteTextView> autoCompleteTextViewList;
     ArrayList<Spinner> spinnerList;
     ArrayList<EditText> editTextList;
     ArrayList<RelativeLayout> relativeLayoutList;
     LinearLayout linearLayout;
 
-    private AddPPRETask addPPRETask = null;
+    private SSJDE_Form.AddSSJDETask addSSJDETask = null;
     private View mProgressView;
     private View mLoginFormView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_ppre__form);
+        setContentView(R.layout.form_ssjde);
 
 
-        mProgressView = (ProgressBar)findViewById(R.id.ppre_progress);
-        mLoginFormView = (View)findViewById(R.id.ppre_form_view);
+        mProgressView = (ProgressBar)findViewById(R.id.ssjde_progress);
+        mLoginFormView = (View)findViewById(R.id.ssjde_form_view);
 
-        //get the list of mrmart and satuan from preferences
-        mrmartArray = Mrmart.getListFromPrefs(getApplicationContext());
+        //get the list of mfgart and satuan from preferences
+        mfgartArray = Mfgart.getListFromPrefs(getApplicationContext());
         satuanArray = Satuan.getListFromPrefs(getApplicationContext());
 
         //Initialize our list for the views
@@ -67,15 +73,15 @@ public class PPRE_Form extends AppCompatActivity {
         spinnerList = new ArrayList<Spinner>();
         relativeLayoutList = new ArrayList<RelativeLayout>();
         editTextList = new ArrayList<EditText>();
-        mrMartList = new ArrayList<Mrmart>();
+        mrMartList = new ArrayList<Mfgart>();
 
 
         //the main linear layout inside scrollview
-        linearLayout = (LinearLayout)findViewById(R.id.content_ppre__form);
+        linearLayout = (LinearLayout)findViewById(R.id.content_ssjde__form);
 
         //initialize our adapoters
-        adapterMrmart = new ArrayAdapter<Mrmart>
-                (this, R.layout.autocomplete_dropdown, mrmartArray);
+        adapterMfgart = new ArrayAdapter<Mfgart>
+                (this, R.layout.autocomplete_dropdown, mfgartArray);
         adapterSatuan = new ArrayAdapter<Satuan>
                 (this, android.R.layout.simple_spinner_item, satuanArray);
 
@@ -87,37 +93,37 @@ public class PPRE_Form extends AppCompatActivity {
     }
 
     protected void addItem(){
-        View itemLayout = LayoutInflater.from(this).inflate(R.layout.content_ppre_form_item,null);
+        View itemLayout = LayoutInflater.from(this).inflate(R.layout.form_ssjde_item, null);
 
         AutoCompleteTextView autoCompleteTextView =
-                (AutoCompleteTextView)itemLayout.findViewById(R.id.ppre_form_autocomplete1);
+                (AutoCompleteTextView)itemLayout.findViewById(R.id.ssjde_form_autocomplete1);
         autoCompleteTextView.setThreshold(2);
-        autoCompleteTextView.setAdapter(adapterMrmart);
+        autoCompleteTextView.setAdapter(adapterMfgart);
 
         autoCompleteTextViewList.add(autoCompleteTextView);
 
-        //to get selected index of autotextview, add it to the mrmart list
+        //to get selected index of autotextview, add it to the mfgart list
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int index = autoCompleteTextViewList.size()-1;
-                mrMartList.set(index, (Mrmart) parent.getItemAtPosition(position));
+                mrMartList.set(index, (Mfgart) parent.getItemAtPosition(position));
             }
         });
 
         //add null list for future reference
         mrMartList.add(null);
 
-        Spinner spinner = (Spinner) itemLayout.findViewById(R.id.ppre_form_spinner1);
+        Spinner spinner = (Spinner) itemLayout.findViewById(R.id.ssjde_form_spinner1);
         spinner.setAdapter(adapterSatuan);
         spinnerList.add(spinner);
 
-        relativeLayoutList.add((RelativeLayout)itemLayout.findViewById(R.id.ppre_form_relativelayout));
+        relativeLayoutList.add((RelativeLayout)itemLayout.findViewById(R.id.ssjde_form_relativelayout));
 
-        ImageButton button = (ImageButton) itemLayout.findViewById(R.id.ppre_form_imagebutton);
+        ImageButton button = (ImageButton) itemLayout.findViewById(R.id.ssjde_form_imagebutton);
         button.setTag(spinnerList.size()-1);
 
-        EditText editText = (EditText) itemLayout.findViewById(R.id.ppre_form_edittext1);
+        EditText editText = (EditText) itemLayout.findViewById(R.id.ssjde_form_edittext1);
         editTextList.add(editText);
 
         linearLayout.addView(itemLayout);
@@ -159,21 +165,23 @@ public class PPRE_Form extends AppCompatActivity {
         if(cancel == false) {
             JSONObject object = new JSONObject();
             try {
-                object.put("token", SharedPrefsHelper.readPrefs(SharedPrefsHelper.TOKEN_PREFS, getApplicationContext()));
+                object.put("token", SharedPrefsHelper.readPrefs(SharedPrefsHelper.TOKEN_PREFS,
+                        getApplicationContext()));
 
                 JSONArray array = new JSONArray();
                 //for every item entry
                 for (int i = 0; i < mrMartList.size(); i++) {
                     //if the component is visible (not deleted)
-                    if (autoCompleteTextViewList.get(i).getVisibility() != AutoCompleteTextView.GONE) {
+                    if (autoCompleteTextViewList.get(i).getVisibility() !=
+                            AutoCompleteTextView.GONE) {
                         //jika sudah ada item yang dipilih
                         if (mrMartList.get(i) != null) {
                             JSONObject entry = new JSONObject();
-                            entry.put(Mrmart.MRMART_ARTICLEID, mrMartList.get(i).getArticleID());
-                            entry.put(Mrmart.MRMART_GROUPID, mrMartList.get(i).getGroupID());
-                            entry.put(Mrmart.MRMART_QUANTITY, editTextList.get(i).getText());
+                            entry.put(Mfgart.MFGART_ARTICLEID, mrMartList.get(i).getArticleID());
+                            entry.put(Mfgart.MFGART_GROUPID, mrMartList.get(i).getGroupID());
+                            entry.put(Mfgart.MFGART_QUANTITY, editTextList.get(i).getText());
                             Satuan s = (Satuan) spinnerList.get(i).getSelectedItem();
-                            entry.put(Mrmart.MRMART_SATUAN, s.getSatuanID());
+                            entry.put(Mfgart.MFGART_SATUAN, s.getSatuanID());
                             array.put(entry);
                         }
                     }
@@ -185,8 +193,8 @@ public class PPRE_Form extends AppCompatActivity {
 
             Log.v("message", object.toString());
             showProgress(true);
-            addPPRETask = new AddPPRETask(object.toString());
-            addPPRETask.execute((Void) null);
+            addSSJDETask = new SSJDE_Form.AddSSJDETask(object.toString());
+            addSSJDETask.execute((Void) null);
         }
     }
 
@@ -231,12 +239,12 @@ public class PPRE_Form extends AppCompatActivity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class AddPPRETask extends AsyncTask<Void, Void, Boolean> {
+    public class AddSSJDETask extends AsyncTask<Void, Void, Boolean> {
 
         private final String jsonRequest;
         private boolean connectionProblem;
 
-        AddPPRETask(String jsonRequest) {
+        AddSSJDETask(String jsonRequest) {
             this.jsonRequest = jsonRequest;
         }
 
@@ -252,7 +260,7 @@ public class PPRE_Form extends AppCompatActivity {
 
             String loginResult = null;
             try {
-                loginResult = handler.makePostCall(parameter, handler.LINK_PPRE_CREATE);
+                loginResult = handler.makePostCall(parameter, handler.LINK_SSJDE_CREATE);
             } catch (IOException e) {
                 connectionProblem = true;
                 return false;
@@ -268,7 +276,8 @@ public class PPRE_Form extends AppCompatActivity {
             showProgress(false);
 //
             if (success) {
-                Toast.makeText(getApplicationContext(), "Permintaan Pembelian Ditambahkan",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Permintaan Pembelian Ditambahkan",
+                        Toast.LENGTH_SHORT).show();
                 finish();
             }
             //TODO jika gagal
@@ -285,10 +294,9 @@ public class PPRE_Form extends AppCompatActivity {
 
         @Override
         protected void onCancelled() {
-            addPPRETask = null;
+            addSSJDETask = null;
             showProgress(false);
         }
     }
-
 
 }
