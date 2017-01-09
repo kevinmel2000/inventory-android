@@ -25,7 +25,6 @@ import com.hartz.inventory.model.User;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
-import java.util.logging.Handler;
 
 
 /**
@@ -281,7 +280,7 @@ public class LoginActivity extends AppCompatActivity {
                 mrmartResult = handler.makeGetCall(handler.LINK_MRMART_GET);
                 mfgartResult = handler.makeGetCall(handler.LINK_MFGART_GET);
                 satuanResult = handler.makeGetCall(handler.LINK_SATUAN_GET);
-                clientResult = handler.makeGetCall(handler.LINK_SATUAN_GET);
+                clientResult = handler.makeGetCall(handler.LINK_CUSTOMER_GET);
             } catch (IOException e) {
                 connectionProblem = true;
                 return false;
@@ -292,7 +291,7 @@ public class LoginActivity extends AppCompatActivity {
                     mrmartResult, getApplicationContext());
             SharedPrefsHelper.saveToPrefs(SharedPrefsHelper.SATUAN_PREFS,
                     satuanResult, getApplicationContext());
-            SharedPrefsHelper.saveToPrefs(SharedPrefsHelper.CLIENT_PREFS,
+            SharedPrefsHelper.saveToPrefs(SharedPrefsHelper.CUSTOMER_PREFS,
                     clientResult, getApplicationContext());
 
             return true;

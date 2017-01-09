@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.hartz.inventory.model.Customer;
 import com.hartz.inventory.model.Mfgart;
 import com.hartz.inventory.model.Satuan;
 
@@ -41,16 +42,18 @@ public class SSJDE_Form extends AppCompatActivity{
 
     ArrayList<Mfgart> mfgartArray;
     ArrayList<Satuan> satuanArray;
+    ArrayList<Customer> customerArray;
     ArrayAdapter<Mfgart> adapterMfgart;
     ArrayAdapter<Satuan> adapterSatuan;
-    ArrayAdapter<Customer> customer;
-    ArrayList<Mfgart> mrMartList;
+    ArrayAdapter<Customer> adapterCustomer;
+    ArrayList<Mfgart> mfgartList;
     ArrayList<AutoCompleteTextView> autoCompleteTextViewList;
     ArrayList<Spinner> spinnerList;
     ArrayList<EditText> editTextList;
     ArrayList<RelativeLayout> relativeLayoutList;
     LinearLayout linearLayout;
-
+    Customer selectedCustomer = null;
+    AutoCompleteTextView customerTextView;
     private SSJDE_Form.AddSSJDETask addSSJDETask = null;
     private View mProgressView;
     private View mLoginFormView;
@@ -67,13 +70,13 @@ public class SSJDE_Form extends AppCompatActivity{
         //get the list of mfgart and satuan from preferences
         mfgartArray = Mfgart.getListFromPrefs(getApplicationContext());
         satuanArray = Satuan.getListFromPrefs(getApplicationContext());
-
+        customerArray = Customer.getListFromPrefs(getApplicationContext());
         //Initialize our list for the views
         autoCompleteTextViewList = new ArrayList<AutoCompleteTextView>();
         spinnerList = new ArrayList<Spinner>();
         relativeLayoutList = new ArrayList<RelativeLayout>();
         editTextList = new ArrayList<EditText>();
-        mrMartList = new ArrayList<Mfgart>();
+        mfgartList = new ArrayList<Mfgart>();
 
 
         //the main linear layout inside scrollview
@@ -84,9 +87,25 @@ public class SSJDE_Form extends AppCompatActivity{
                 (this, R.layout.autocomplete_dropdown, mfgartArray);
         adapterSatuan = new ArrayAdapter<Satuan>
                 (this, android.R.layout.simple_spinner_item, satuanArray);
+        adapterCustomer = new ArrayAdapter<Customer>
+                (this, R.layout.autocomplete_dropdown, customerArray);
 
         //change the looks of our adapter satuan
         adapterSatuan.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+      customerTextView =
+                (AutoCompleteTextView)findViewById(R.id.ssjde_form_autocompletecustomer);
+        customerTextView.setThreshold(2);
+        customerTextView.setAdapter(adapterCustomer);
+
+        //to get selected index of autotextview, add it to the mfgart list
+        customerTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int index = autoCompleteTextViewList.size()-1;
+                selectedCustomer = (Customer) parent.getItemAtPosition(position);
+            }
+        });
 
         //add inital item
         addItem();
@@ -107,12 +126,12 @@ public class SSJDE_Form extends AppCompatActivity{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int index = autoCompleteTextViewList.size()-1;
-                mrMartList.set(index, (Mfgart) parent.getItemAtPosition(position));
+                mfgartList.set(index, (Mfgart) parent.getItemAtPosition(position));
             }
         });
 
         //add null list for future reference
-        mrMartList.add(null);
+        mfgartList.add(null);
 
         Spinner spinner = (Spinner) itemLayout.findViewById(R.id.ssjde_form_spinner1);
         spinner.setAdapter(adapterSatuan);
@@ -146,9 +165,15 @@ public class SSJDE_Form extends AppCompatActivity{
 
         //validation of each entries
         boolean cancel = false;
+
+        if(selectedCustomer == null){
+            customerTextView.setError(getString(R.string.error_ppre_invalid_item));
+            customerTextView.requestFocus();
+        }
+
         for(int i = 0; i < autoCompleteTextViewList.size(); i++){
             if(autoCompleteTextViewList.get(i).getVisibility() != AutoCompleteTextView.GONE) {
-                if (mrMartList.get(i) == null) {
+                if (mfgartList.get(i) == null) {
                     autoCompleteTextViewList.get(i).setError(getString(R.string.error_ppre_invalid_item));
                     autoCompleteTextViewList.get(i).requestFocus();
                     cancel = true;
@@ -167,18 +192,18 @@ public class SSJDE_Form extends AppCompatActivity{
             try {
                 object.put("token", SharedPrefsHelper.readPrefs(SharedPrefsHelper.TOKEN_PREFS,
                         getApplicationContext()));
-
+                object.put("custid", selectedCustomer.getId());
                 JSONArray array = new JSONArray();
                 //for every item entry
-                for (int i = 0; i < mrMartList.size(); i++) {
+                for (int i = 0; i < mfgartList.size(); i++) {
                     //if the component is visible (not deleted)
                     if (autoCompleteTextViewList.get(i).getVisibility() !=
                             AutoCompleteTextView.GONE) {
                         //jika sudah ada item yang dipilih
-                        if (mrMartList.get(i) != null) {
+                        if (mfgartList.get(i) != null) {
                             JSONObject entry = new JSONObject();
-                            entry.put(Mfgart.MFGART_ARTICLEID, mrMartList.get(i).getArticleID());
-                            entry.put(Mfgart.MFGART_GROUPID, mrMartList.get(i).getGroupID());
+                            entry.put(Mfgart.MFGART_ARTICLEID, mfgartList.get(i).getArticleID());
+                            entry.put(Mfgart.MFGART_GROUPID, mfgartList.get(i).getGroupID());
                             entry.put(Mfgart.MFGART_QUANTITY, editTextList.get(i).getText());
                             Satuan s = (Satuan) spinnerList.get(i).getSelectedItem();
                             entry.put(Mfgart.MFGART_SATUAN, s.getSatuanID());
@@ -255,6 +280,7 @@ public class SSJDE_Form extends AppCompatActivity{
             // Simulate network access.
             HttpHandler handler = new HttpHandler(getApplicationContext());
             LinkedHashMap<String, Object> parameter = new LinkedHashMap<>();
+
             parameter.put("json", jsonRequest);
 
 
