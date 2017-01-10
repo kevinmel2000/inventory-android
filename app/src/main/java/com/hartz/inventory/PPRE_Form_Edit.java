@@ -104,8 +104,6 @@ public class PPRE_Form_Edit extends AppCompatActivity {
             autoCompleteTextView.setThreshold(2);
             autoCompleteTextView.setAdapter(adapterMrmart);
             int pos = adapterMrmart.getPosition(mrmart);
-            Log.v("adapter mrmart pos", pos+"");
-            Log.v("adapter length", adapterMrmart.getCount()+"");
             autoCompleteTextView.setText(mrmart.toString());
 
             autoCompleteTextViewList.add(autoCompleteTextView);

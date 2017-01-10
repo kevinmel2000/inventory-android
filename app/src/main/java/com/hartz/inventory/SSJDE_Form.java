@@ -95,7 +95,7 @@ public class SSJDE_Form extends AppCompatActivity{
 
       customerTextView =
                 (AutoCompleteTextView)findViewById(R.id.ssjde_form_autocompletecustomer);
-        customerTextView.setThreshold(2);
+        customerTextView.setThreshold(1);
         customerTextView.setAdapter(adapterCustomer);
 
         //to get selected index of autotextview, add it to the mfgart list
@@ -116,7 +116,7 @@ public class SSJDE_Form extends AppCompatActivity{
 
         AutoCompleteTextView autoCompleteTextView =
                 (AutoCompleteTextView)itemLayout.findViewById(R.id.ssjde_form_autocomplete1);
-        autoCompleteTextView.setThreshold(2);
+        autoCompleteTextView.setThreshold(1);
         autoCompleteTextView.setAdapter(adapterMfgart);
 
         autoCompleteTextViewList.add(autoCompleteTextView);

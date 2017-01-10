@@ -14,22 +14,23 @@ import java.util.ArrayList;
 public class SSJDE implements Serializable{
     private String id;
     private String user;
-    private String client;
+    private Customer customer;
     private ArrayList<Mfgart> itemList;
 
     public SSJDE() {
     }
 
-    public String getClient() {
-        return client;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setClient(String client) {
-        this.client = client;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
-    public SSJDE(String id) {
+    public SSJDE(String id, Customer customer) {
         this.id = id;
+        this.customer = customer;
     }
 
     public String getId() {
@@ -64,19 +65,23 @@ public class SSJDE implements Serializable{
             JSONArray arr = jsonObject.getJSONArray("entries");
             for(int i = 0; i < arr.length(); i++){
                 JSONObject jsonObj = arr.getJSONObject(i);
+                //get item list
                 JSONArray arr2 = jsonObj.getJSONArray("ssjded");
                 ArrayList<Mfgart> listMfgart = new ArrayList<Mfgart>();
                 for(int j = 0; j < arr2.length(); j++){
                     JSONObject mfgartobj = arr2.getJSONObject(j);
                     listMfgart.add(
                             new Mfgart(mfgartobj.getString("SSJDE_GROUP"),
-                                    mfgartobj.getString("PPRED_ART"),
+                                    mfgartobj.getString("SSJDE_ART"),
                                     mfgartobj.getString("SSJDE_ARTICLENAME"),
-                                    mfgartobj.getInt("PPRED_QTY"),
+                                    mfgartobj.getInt("SSJDE_QTY"),
                                     mfgartobj.getString("SSJDE_SATUAN")
                     ));
                 }
-                SSJDE ssjde = new SSJDE(jsonObj.getString("PPRE_DateTime"));
+
+                SSJDE ssjde = new SSJDE(jsonObj.getString("SSJDE_DateTime"),
+                        new Customer(jsonObj.getString("SSJDE_CUSTID"),
+                                jsonObj.getString("SSJDE_CUSTNAME")));
                 ssjde.setItemList(listMfgart);
                 list.add(ssjde);
             }

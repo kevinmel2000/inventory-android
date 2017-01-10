@@ -62,11 +62,11 @@ public class Fragment_SSJDE extends Fragment {
 
     @Override
     public void onResume() {
-//        showProgress(true);
-//        ssjdeLoadTask = new Fragment_SSJDE.LoadSSJDETask(
-//                SharedPrefsHelper.readPrefs(SharedPrefsHelper.NAME_PREFS,
-//                getActivity().getApplicationContext()));
-//        ssjdeLoadTask.execute((Void)null);
+        showProgress(true);
+        ssjdeLoadTask = new Fragment_SSJDE.LoadSSJDETask(
+                SharedPrefsHelper.readPrefs(SharedPrefsHelper.NAME_PREFS,
+                getActivity().getApplicationContext()));
+        ssjdeLoadTask.execute((Void)null);
 
         super.onResume();
     }
@@ -133,7 +133,7 @@ public class Fragment_SSJDE extends Fragment {
             HttpHandler handler = new HttpHandler(getActivity().getApplicationContext());
 
             try {
-                loginResult = handler.makeGetCall(handler.LINK_PPRE_BY_USER+username);
+                loginResult = handler.makeGetCall(handler.LINK_SSJDE_BY_USER+username);
             } catch (IOException e) {
                 connectionProblem = true;
                 return false;
@@ -150,17 +150,11 @@ public class Fragment_SSJDE extends Fragment {
 //
             if (success) {
                 loadSSJDEList();
+            } else {
+                Intent i = new Intent(getActivity(), LoginActivity.class);
+                startActivity(i);
+                getActivity().finish();
             }
-            //TODO jika gagal
-//            } else {
-//                if(connectionProblem){
-//                    mPasswordView.setError(getString(R.string.error_network_problem));
-//                }else{
-//                    mPasswordView.setError(getString(R.string.error_incorrect_password));
-//                }
-//
-//                mPasswordView.requestFocus();
-//            }
         }
 
         @Override
@@ -197,7 +191,7 @@ public class Fragment_SSJDE extends Fragment {
             Log.v("token = ", SharedPrefsHelper.readPrefs(SharedPrefsHelper.TOKEN_PREFS, getActivity().getApplicationContext()));
             String loginResult = null;
             try {
-                loginResult = handler.makePostCall(parameter, handler.LINK_DELETE_PPRE+"/"+id);
+                loginResult = handler.makePostCall(parameter, handler.LINK_DELETE_SSJDE+"/"+id);
             } catch (IOException e) {
                 connectionProblem = true;
                 return false;
@@ -275,16 +269,20 @@ public class Fragment_SSJDE extends Fragment {
                 view = inflater.inflate(R.layout.list_ssjde_item, null);
             }
 
+            final SSJDE ssjde = list.get(position);
             //Handle TextView and display string from your list
             TextView listItemText = (TextView)view.findViewById(R.id.list_ssjde_item_id);
-            listItemText.setText(list.get(position).getId());
+            listItemText.setText(ssjde.getId());
 
             TextView listItemDesc = (TextView)view.findViewById(R.id.list_ssjde_item_items);
-            listItemDesc.setText(list.get(position).itemListToString());
+            listItemDesc.setText(ssjde.itemListToString());
 
+            TextView listItemCust = (TextView)view.findViewById(R.id.list_ssjde_item_customer);
+            listItemCust.setText("Cust: "+ssjde.getCustomer().getName());
             //Handle buttons and add onClickListeners
             ImageButton deleteBtn = (ImageButton)view.findViewById(R.id.list_ssjde_item_delete);
             ImageButton editBtn = (ImageButton)view.findViewById(R.id.list_ssjde_item_edit);
+
 
             deleteBtn.setOnClickListener(new View.OnClickListener(){
                 @Override
@@ -323,7 +321,7 @@ public class Fragment_SSJDE extends Fragment {
                 public void onClick(View v) {
                     //do something
                     Intent i = new Intent(getActivity(), SSJDE_Form_Edit.class);
-                    i.putExtra("ssjdeObject", list.get(position));
+                    i.putExtra("ssjdeObject", ssjde);
                     startActivity(i);
                 }
             });

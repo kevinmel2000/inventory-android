@@ -41,11 +41,17 @@ public class MainActivity extends AppCompatActivity
         // Begin the transaction
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         // Replace the contents of the container with the new fragment
-        ft.replace(R.id.fragment_placeholder, new Fragment_PPRE());
+        ft.replace(R.id.fragment_placeholder, new Fragment_SSJDE());
         // or ft.add(R.id.your_placeholder, new FooFragment());
         // Complete the changes added above
         ft.commit();
+
+        if(SharedPrefsHelper.readPrefs(SharedPrefsHelper.ROLE_PREFS, getApplicationContext()).equals("user")){
+            Menu nav_Menu = navigationView.getMenu();
+            nav_Menu.findItem(R.id.nav_ppre).setVisible(false);
+        }
     }
+
 
     @Override
     public void onBackPressed() {
@@ -61,6 +67,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
         return true;
     }
 
