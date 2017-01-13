@@ -12,7 +12,9 @@
         android:text="s follows:1.  On the second paragraph of the introduction, please replace it with the following:The SEAMEO Regional Centre for Tropical Biology (BIOTROP) has developed the following multi-uses of this crop through its Sorghum Research Development Program since 20__ (Please ask Pak Pri about the exact year)2. We need to be consistent on the positioning of the labels"
         android:layout_below="@+id/list_ssjde_item_delete"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -36,8 +38,10 @@
         android:layout_height="wrap_content"
         android:text="CLIENT NAME GOES HERE"
         android:id="@+id/list_ssjde_item_customer"
+        android:textColor="#000000"
         android:layout_below="@+id/list_ssjde_item_id"
         android:layout_alignLeft="@+id/list_ssjde_item_id"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,5 +53,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:paddingTop="11dp" />
+         />
+
+
 </RelativeLayout>

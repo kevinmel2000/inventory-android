@@ -75,7 +75,8 @@ public class SSJDE implements Serializable{
                                     mfgartobj.getString("SSJDE_ART"),
                                     mfgartobj.getString("SSJDE_ARTICLENAME"),
                                     mfgartobj.getInt("SSJDE_QTY"),
-                                    mfgartobj.getString("SSJDE_SATUAN")
+                                    mfgartobj.getString("SSJDE_SATUAN"),
+                                    mfgartobj.getString("SSJDE_NOTE")
                     ));
                 }
 
@@ -101,7 +102,8 @@ public class SSJDE implements Serializable{
             sb.append(" ("+mfgart.getGroupID()+")");
             sb.append(" "+mfgart.getQuantity());
             sb.append(" "+mfgart.getSatuan());
-            if(i != itemList.size()-1)sb.append("\r\n");
+            sb.append("\nCatatan: "+mfgart.getNote());
+            if(i != itemList.size()-1)sb.append("\r\n\r\n");
         }
         return sb.toString();
     }

@@ -278,7 +278,7 @@ public class Fragment_SSJDE extends Fragment {
             listItemDesc.setText(ssjde.itemListToString());
 
             TextView listItemCust = (TextView)view.findViewById(R.id.list_ssjde_item_customer);
-            listItemCust.setText("Cust: "+ssjde.getCustomer().getName());
+            listItemCust.setText("("+ssjde.getCustomer().getName()+")");
             //Handle buttons and add onClickListeners
             ImageButton deleteBtn = (ImageButton)view.findViewById(R.id.list_ssjde_item_delete);
             ImageButton editBtn = (ImageButton)view.findViewById(R.id.list_ssjde_item_edit);

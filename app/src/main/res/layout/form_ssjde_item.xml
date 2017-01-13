@@ -42,11 +42,19 @@
         android:layout_toEndOf="@+id/ssjde_form_edittext1"
         android:layout_toRightOf="@+id/ssjde_form_edittext1" />
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/ssjde_form_spinner1"
+        android:id="@+id/ssjde_form_note"
+        android:hint="Catatan"
+        />
     <View
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="3dp"
-        android:layout_below="@id/ssjde_form_spinner1"
+        android:layout_below="@id/ssjde_form_note"
         android:background="#00ffaa"
         android:elevation="4dp"/>
 </RelativeLayout>

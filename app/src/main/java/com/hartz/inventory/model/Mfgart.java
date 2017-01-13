@@ -21,7 +21,7 @@ public class Mfgart implements Serializable{
     private String articleName;
     private int quantity;
     private String satuan;
-
+    private String note;
 
     public final static String MFGART_GROUPID = "SSJDE_GROUP";
     public final static String MFGART_ARTICLEID = "SSJDE_ART";
@@ -30,12 +30,13 @@ public class Mfgart implements Serializable{
     public final static String MFGART_NOTE = "SSJDE_NOTE";
 
 
-    public Mfgart(String groupID, String articleID, String articleName, int quantity, String satuan) {
+    public Mfgart(String groupID, String articleID, String articleName, int quantity, String satuan, String note) {
         this.groupID = groupID;
         this.articleID = articleID;
         this.articleName = articleName;
         this.quantity = quantity;
         this.satuan = satuan;
+        this.note = note;
     }
 
     public Mfgart(String groupID, String articleID, String articleName) {
@@ -134,5 +135,13 @@ public class Mfgart implements Serializable{
         int result = groupID != null ? groupID.hashCode() : 0;
         result = 31 * result + (articleID != null ? articleID.hashCode() : 0);
         return result;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

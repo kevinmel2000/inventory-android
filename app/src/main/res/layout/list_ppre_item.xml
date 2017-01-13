@@ -4,15 +4,19 @@
     android:layout_height="wrap_content"
     >
 
+
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/list_ppre_item_items"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:id="@+id/list_ppre_item_id"
         android:textColor="#000000"
-        android:text="s follows:1.  On the second paragraph of the introduction, please replace it with the following:The SEAMEO Regional Centre for Tropical Biology (BIOTROP) has developed the following multi-uses of this crop through its Sorghum Research Development Program since 20__ (Please ask Pak Pri about the exact year)2. We need to be consistent on the positioning of the labels"
-        android:layout_below="@+id/list_ppre_item_delete"
+        android:text="this is the id part"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="11dp" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -33,15 +37,34 @@
         android:layout_alignParentEnd="true" />
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_ppre_item_items"
+        android:textColor="#000000"
+        android:text="s follows:1.  On the second paragraph of the introduction, please replace it with the following:The SEAMEO Regional Centre for Tropical Biology (BIOTROP) has developed the following multi-uses of this crop through its Sorghum Research Development Program since 20__ (Please ask Pak Pri about the exact year)2. We need to be consistent on the positioning of the labels"
+        android:layout_below="@+id/list_ppre_item_delete"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/list_ppre_item_catatan_title"
+        android:layout_below="@+id/list_ppre_item_items"
+        android:layout_alignParentLeft="true"
+        android:text="Catatan: "
         android:textStyle="bold"
         android:textSize="18sp"
-        android:id="@+id/list_ppre_item_id"
         android:textColor="#000000"
-        android:text="this is the id part"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="11dp" />
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_ppre_item_note"
+       android:text="jahns dkjasijdiouq owdja lsdnasiodjasoidj oas"
+        android:layout_alignBaseline="@+id/list_ppre_item_catatan_title"
+        android:layout_alignBottom="@+id/list_ppre_item_catatan_title"
+        android:layout_toRightOf="@+id/list_ppre_item_catatan_title"
+        android:textColor="#000000"
+        />
 </RelativeLayout>

@@ -50,6 +50,7 @@ public class SSJDE_Form extends AppCompatActivity{
     ArrayList<AutoCompleteTextView> autoCompleteTextViewList;
     ArrayList<Spinner> spinnerList;
     ArrayList<EditText> editTextList;
+    ArrayList<EditText> editTextNoteList;
     ArrayList<RelativeLayout> relativeLayoutList;
     LinearLayout linearLayout;
     Customer selectedCustomer = null;
@@ -76,6 +77,7 @@ public class SSJDE_Form extends AppCompatActivity{
         spinnerList = new ArrayList<Spinner>();
         relativeLayoutList = new ArrayList<RelativeLayout>();
         editTextList = new ArrayList<EditText>();
+        editTextNoteList = new ArrayList<EditText>();
         mfgartList = new ArrayList<Mfgart>();
 
 
@@ -145,6 +147,9 @@ public class SSJDE_Form extends AppCompatActivity{
         EditText editText = (EditText) itemLayout.findViewById(R.id.ssjde_form_edittext1);
         editTextList.add(editText);
 
+        EditText editText1 = (EditText) itemLayout.findViewById(R.id.ssjde_form_note);
+        editTextNoteList.add(editText1);
+
         linearLayout.addView(itemLayout);
     }
 
@@ -207,6 +212,7 @@ public class SSJDE_Form extends AppCompatActivity{
                             entry.put(Mfgart.MFGART_QUANTITY, editTextList.get(i).getText());
                             Satuan s = (Satuan) spinnerList.get(i).getSelectedItem();
                             entry.put(Mfgart.MFGART_SATUAN, s.getSatuanID());
+                            entry.put(Mfgart.MFGART_NOTE, editTextNoteList.get(i).getText());
                             array.put(entry);
                         }
                     }

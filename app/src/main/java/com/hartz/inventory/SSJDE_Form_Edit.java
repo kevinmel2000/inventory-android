@@ -33,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -52,6 +53,7 @@ public class SSJDE_Form_Edit extends AppCompatActivity{
     ArrayList<AutoCompleteTextView> autoCompleteTextViewList;
     ArrayList<Spinner> spinnerList;
     ArrayList<EditText> editTextList;
+    ArrayList<EditText> editTextNoteList;
     ArrayList<RelativeLayout> relativeLayoutList;
     LinearLayout linearLayout;
     Customer selectedCustomer = null;
@@ -83,7 +85,7 @@ public class SSJDE_Form_Edit extends AppCompatActivity{
         relativeLayoutList = new ArrayList<RelativeLayout>();
         editTextList = new ArrayList<EditText>();
         mfgartList = new ArrayList<Mfgart>();
-
+        editTextNoteList = new ArrayList<EditText>();
 
         //the main linear layout inside scrollview
         linearLayout = (LinearLayout)findViewById(R.id.content_ssjde__form);
@@ -163,6 +165,10 @@ public class SSJDE_Form_Edit extends AppCompatActivity{
             editText.setText(mfgart.getQuantity()+"");
             editTextList.add(editText);
 
+            EditText editText1 = (EditText) itemLayout.findViewById(R.id.ssjde_form_note);
+            editText1.setText(mfgart.getNote());
+            editTextNoteList.add(editText1);
+
             linearLayout.addView(itemLayout);
         }
     }
@@ -201,6 +207,10 @@ public class SSJDE_Form_Edit extends AppCompatActivity{
 
         EditText editText = (EditText) itemLayout.findViewById(R.id.ssjde_form_edittext1);
         editTextList.add(editText);
+
+        EditText editText1 = (EditText) itemLayout.findViewById(R.id.ssjde_form_note);
+        editTextNoteList.add(editText1);
+
 
         linearLayout.addView(itemLayout);
     }
@@ -264,16 +274,21 @@ public class SSJDE_Form_Edit extends AppCompatActivity{
                         if (!autoCompleteTextViewList.get(i).getText().equals("")) {
                             JSONObject entry = new JSONObject();
                             Mfgart mrmart = mfgartList.get(i);
+                            //jika belum ada objek terpilih
                             if (mrmart == null) {
                                 mrmart = ssjde.getItemList().get(i);
-                                Log.v("mrmart is null at", mrmart.getArticleID() + " index: " + i);
+                                entry.put(Mfgart.MFGART_ARTICLEID, mrmart.getArticleID());
+                                entry.put(Mfgart.MFGART_GROUPID, mrmart.getGroupID());
+                            }else{
+                                entry.put(Mfgart.MFGART_ARTICLEID, mrmart.getArticleID());
+                                entry.put(Mfgart.MFGART_GROUPID, mrmart.getGroupID());
                             }
 
-                            entry.put(Mfgart.MFGART_ARTICLEID, mrmart.getArticleID());
-                            entry.put(Mfgart.MFGART_GROUPID, mrmart.getGroupID());
-                            entry.put(Mfgart.MFGART_QUANTITY, mrmart.getQuantity());
+
+                            entry.put(Mfgart.MFGART_QUANTITY, editTextList.get(i).getText());
                             Satuan s = (Satuan) spinnerList.get(i).getSelectedItem();
                             entry.put(Mfgart.MFGART_SATUAN, s.getSatuanID());
+                            entry.put(Mfgart.MFGART_NOTE, editTextNoteList.get(i).getText());
                             array.put(entry);
                         }
                     }
