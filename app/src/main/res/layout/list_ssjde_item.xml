@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     >
-
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/list_ssjde_item_items"
-        android:textColor="#000000"
-        android:text="s follows:1.  On the second paragraph of the introduction, please replace it with the following:The SEAMEO Regional Centre for Tropical Biology (BIOTROP) has developed the following multi-uses of this crop through its Sorghum Research Development Program since 20__ (Please ask Pak Pri about the exact year)2. We need to be consistent on the positioning of the labels"
-        android:layout_below="@+id/list_ssjde_item_delete"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp"
-        />
+        android:background="#2980b9"
+        android:paddingLeft="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:id="@+id/list_ssjde_item_id"
+            android:textColor="#000000"
+            android:text="this is the id part"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -32,7 +39,8 @@
         android:src="@drawable/ic_delete_forever_red_600_24dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="5dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,18 +50,27 @@
         android:layout_below="@+id/list_ssjde_item_id"
         android:layout_alignLeft="@+id/list_ssjde_item_id"/>
 
+    </RelativeLayout>
+
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:id="@+id/list_ssjde_item_id"
+        android:id="@+id/list_ssjde_item_items"
         android:textColor="#000000"
-        android:text="this is the id part"
-        android:layout_alignParentTop="true"
+        android:text="s follows:1.  On the second paragraph of the introduction,
+        please replace it with the following:The SEAMEO Regional Centre for Tropical
+         Biology (BIOTROP) has developed the following multi-uses of this crop through"
+        android:layout_below="@+id/list_ssjde_item_delete"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-         />
-
-
-</RelativeLayout>
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="15dp"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#72B0D9"
+        android:layout_marginBottom="5dp"
+        />
+</LinearLayout>

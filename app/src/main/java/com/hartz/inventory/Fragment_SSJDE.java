@@ -287,7 +287,6 @@ public class Fragment_SSJDE extends Fragment {
             deleteBtn.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    //TODO delete and edit button
 
                     /** convert builder to dialog */
                     AlertDialog alert = new AlertDialog.Builder(getActivity()).create();

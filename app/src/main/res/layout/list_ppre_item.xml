@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     >
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#2980b9"
+        android:paddingLeft="8dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -34,7 +39,11 @@
         android:src="@drawable/ic_delete_forever_red_600_24dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="5dp"/>
+
+
+</RelativeLayout>
 
     <TextView
         android:layout_width="match_parent"
@@ -45,26 +54,10 @@
         android:layout_below="@+id/list_ppre_item_delete"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/list_ppre_item_catatan_title"
-        android:layout_below="@+id/list_ppre_item_items"
-        android:layout_alignParentLeft="true"
-        android:text="Catatan: "
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:textColor="#000000"
-        />
-
-    <TextView
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/list_ppre_item_note"
-       android:text="jahns dkjasijdiouq owdja lsdnasiodjasoidj oas"
-        android:layout_alignBaseline="@+id/list_ppre_item_catatan_title"
-        android:layout_alignBottom="@+id/list_ppre_item_catatan_title"
-        android:layout_toRightOf="@+id/list_ppre_item_catatan_title"
-        android:textColor="#000000"
+        android:layout_height="2dp"
+        android:background="#72B0D9"
+        android:layout_marginBottom="5dp"
         />
-</RelativeLayout>
+    </LinearLayout>

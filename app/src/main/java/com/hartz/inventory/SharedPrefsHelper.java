@@ -18,6 +18,8 @@ public class SharedPrefsHelper{
     public static final String PASSWORD_PREFS = "Password";
     public static final String MFGART_PREFS = "MfgartJson";
     public static final String CUSTOMER_PREFS = "ClientJson";
+    public static final String LAST_SERVER_PREFS = "LastServerName";
+    public static final String LAST_NAME_PREFS = "LastUserName";
 
 
     public static void saveToPrefs(String key, String value, Context context){
@@ -48,6 +50,16 @@ public class SharedPrefsHelper{
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if(prefs.getString(ROLE_PREFS, null) != null && prefs.getString(TOKEN_PREFS, null) != null) return true;
         return false;
+    }
+
+    public static String lastServer(Context context){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(LAST_SERVER_PREFS, null);
+    }
+
+    public static String lastName(Context context){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(LAST_NAME_PREFS, null);
     }
 
     public static void logout(Context context){

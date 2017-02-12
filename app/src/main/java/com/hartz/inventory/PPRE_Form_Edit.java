@@ -44,6 +44,7 @@ public class PPRE_Form_Edit extends AppCompatActivity {
     ArrayList<AutoCompleteTextView> autoCompleteTextViewList;
     ArrayList<Spinner> spinnerList;
     ArrayList<EditText> editTextList;
+    ArrayList<EditText> editTextNoteList;
     ArrayList<RelativeLayout> relativeLayoutList;
     LinearLayout linearLayout;
     PPRE ppre;
@@ -73,6 +74,7 @@ public class PPRE_Form_Edit extends AppCompatActivity {
         spinnerList = new ArrayList<Spinner>();
         relativeLayoutList = new ArrayList<RelativeLayout>();
         editTextList = new ArrayList<EditText>();
+        editTextNoteList = new ArrayList<EditText>();
         mrMartList = new ArrayList<Mrmart>();
 
 
@@ -139,6 +141,10 @@ public class PPRE_Form_Edit extends AppCompatActivity {
             editText.setText(mrmart.getQuantity()+"");
             editTextList.add(editText);
 
+            EditText editText1 = (EditText) itemLayout.findViewById(R.id.ppre_form_note);
+            editText1.setText(mrmart.getNote());
+            editTextNoteList.add(editText1);
+
             linearLayout.addView(itemLayout);
         }
     }
@@ -178,27 +184,26 @@ public class PPRE_Form_Edit extends AppCompatActivity {
         EditText editText = (EditText) itemLayout.findViewById(R.id.ppre_form_edittext1);
         editTextList.add(editText);
 
+        EditText editText1 = (EditText) itemLayout.findViewById(R.id.ppre_form_note);
+        editTextNoteList.add(editText1);
+
         linearLayout.addView(itemLayout);
     }
 
-    protected void addRecord(View v){
-        Log.v("message", "add record pressed");
+    public void addRecord(View v){
         addItem();
     }
 
-    protected void deleteRecord(View v){
-
-        Log.v("message", "delete record");
+    public void deleteRecord(View v){
         int index = (int)v.getTag();
         relativeLayoutList.get(index).setVisibility(RelativeLayout.GONE);
-
     }
 
-    protected void submitRecord(View v){
+    public void submitRecord(View v){
         //validation of each entries
         boolean cancel = false;
-        for(int i = 0; i < autoCompleteTextViewList.size(); i++){
-            if(autoCompleteTextViewList.get(i).getVisibility() != AutoCompleteTextView.GONE) {
+        for(int i = 0; i < relativeLayoutList.size(); i++){
+            if(relativeLayoutList.get(i).getVisibility() == AutoCompleteTextView.VISIBLE) {
                 if (mrMartList.get(i) == null) {
                     try {
                         ppre.getItemList().get(i);
@@ -227,20 +232,22 @@ public class PPRE_Form_Edit extends AppCompatActivity {
                 //for every item entry
                 for (int i = 0; i < mrMartList.size(); i++) {
                     //if the component is visible (not deleted)
-                    if (autoCompleteTextViewList.get(i).getVisibility() != AutoCompleteTextView.GONE) {
+                    if (relativeLayoutList.get(i).getVisibility() == View.VISIBLE) {
                         //jika sudah ada item yang dipilih
                         if (!autoCompleteTextViewList.get(i).getText().equals("")) {
                             JSONObject entry = new JSONObject();
                             Mrmart mrmart = mrMartList.get(i);
+
+                            //jika belum ada objek terpilih
                             if (mrmart == null) {
                                 mrmart = ppre.getItemList().get(i);
-                                Log.v("mrmart is null at", mrmart.getArticleID() + " index: " + i);
                             }
                             entry.put(Mrmart.MRMART_ARTICLEID, mrmart.getArticleID());
                             entry.put(Mrmart.MRMART_GROUPID, mrmart.getGroupID());
                             entry.put(Mrmart.MRMART_QUANTITY, editTextList.get(i).getText());
                             Satuan s = (Satuan) spinnerList.get(i).getSelectedItem();
                             entry.put(Mrmart.MRMART_SATUAN, s.getSatuanID());
+                            entry.put(Mrmart.MRMART_NOTE, editTextNoteList.get(i).getText());
                             array.put(entry);
                         }
                     }

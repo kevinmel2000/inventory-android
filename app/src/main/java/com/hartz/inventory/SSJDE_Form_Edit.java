@@ -215,20 +215,18 @@ public class SSJDE_Form_Edit extends AppCompatActivity{
         linearLayout.addView(itemLayout);
     }
 
-    protected void addRecord(View v){
+    public void addRecord(View v){
         Log.v("message", "add record pressed");
         addItem();
     }
 
-    protected void deleteRecord(View v){
-
+    public void deleteRecord(View v){
         Log.v("message", "delete record");
         int index = (int)v.getTag();
         relativeLayoutList.get(index).setVisibility(RelativeLayout.GONE);
-
     }
 
-    protected void submitRecord(View v){
+    public void submitRecord(View v){
 
         //validation of each entries
         boolean cancel = false;
@@ -238,8 +236,8 @@ public class SSJDE_Form_Edit extends AppCompatActivity{
             customerTextView.requestFocus();
         }
 
-        for(int i = 0; i < autoCompleteTextViewList.size(); i++){
-            if(autoCompleteTextViewList.get(i).getVisibility() != AutoCompleteTextView.GONE) {
+        for(int i = 0; i < relativeLayoutList.size(); i++){
+            if(relativeLayoutList.get(i).getVisibility() == AutoCompleteTextView.VISIBLE) {
                 if (mfgartList.get(i) == null) {
                     try {
                         ssjde.getItemList().get(i);
@@ -268,8 +266,8 @@ public class SSJDE_Form_Edit extends AppCompatActivity{
                 //for every item entry
                 for (int i = 0; i < mfgartList.size(); i++) {
                     //if the component is visible (not deleted)
-                    if (autoCompleteTextViewList.get(i).getVisibility() !=
-                            AutoCompleteTextView.GONE) {
+                    if (relativeLayoutList.get(i).getVisibility() ==
+                            View.VISIBLE) {
                         //jika sudah ada item yang dipilih
                         if (!autoCompleteTextViewList.get(i).getText().equals("")) {
                             JSONObject entry = new JSONObject();
@@ -277,14 +275,10 @@ public class SSJDE_Form_Edit extends AppCompatActivity{
                             //jika belum ada objek terpilih
                             if (mrmart == null) {
                                 mrmart = ssjde.getItemList().get(i);
-                                entry.put(Mfgart.MFGART_ARTICLEID, mrmart.getArticleID());
-                                entry.put(Mfgart.MFGART_GROUPID, mrmart.getGroupID());
-                            }else{
-                                entry.put(Mfgart.MFGART_ARTICLEID, mrmart.getArticleID());
-                                entry.put(Mfgart.MFGART_GROUPID, mrmart.getGroupID());
                             }
 
-
+                            entry.put(Mfgart.MFGART_ARTICLEID, mrmart.getArticleID());
+                            entry.put(Mfgart.MFGART_GROUPID, mrmart.getGroupID());
                             entry.put(Mfgart.MFGART_QUANTITY, editTextList.get(i).getText());
                             Satuan s = (Satuan) spinnerList.get(i).getSelectedItem();
                             entry.put(Mfgart.MFGART_SATUAN, s.getSatuanID());
@@ -387,17 +381,11 @@ public class SSJDE_Form_Edit extends AppCompatActivity{
                 Toast.makeText(getApplicationContext(), "Permintaan Pembelian Ditambahkan",
                         Toast.LENGTH_SHORT).show();
                 finish();
+
+            } else {
+            Toast.makeText(getApplicationContext(), "Gagal menambahkan pembelian",
+                    Toast.LENGTH_SHORT).show();
             }
-            //TODO jika gagal
-//            } else {
-//                if(connectionProblem){
-//                    mPasswordView.setError(getString(R.string.error_network_problem));
-//                }else{
-//                    mPasswordView.setError(getString(R.string.error_incorrect_password));
-//                }
-//
-//                mPasswordView.requestFocus();
-//            }
         }
 
         @Override

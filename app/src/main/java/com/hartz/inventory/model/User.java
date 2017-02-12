@@ -34,6 +34,7 @@ public class User {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString(SharedPrefsHelper.NAME_PREFS, name);
+            editor.putString(SharedPrefsHelper.LAST_NAME_PREFS, name);
             editor.putString(SharedPrefsHelper.ROLE_PREFS, role);
             editor.putString(SharedPrefsHelper.TOKEN_PREFS, token);
             editor.apply();

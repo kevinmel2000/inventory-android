@@ -24,6 +24,8 @@ import android.widget.Toast;
 import com.hartz.inventory.model.User;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.LinkedHashMap;
 
 
@@ -42,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mUserView, mServerView, mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private EditText debugBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +53,24 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mServerView = (EditText) findViewById(R.id.server);
+        String lastServer = SharedPrefsHelper.lastServer(getApplicationContext());
+        if(lastServer != null){
+            mServerView.setText(lastServer);
+        }else{
+            mServerView.setText("");
+        }
+
         mUserView = (EditText) findViewById(R.id.user);
+        String lastUser = SharedPrefsHelper.lastName(getApplicationContext());
+        if(lastUser != null){
+            mUserView.setText(lastUser);
+        }else{
+            mUserView.setText("");
+        }
+
         mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView.setText("");
+
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -75,7 +94,6 @@ public class LoginActivity extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
 
         //logged in automatically if prefs exist
-        //TODO add remember me button
         if(SharedPrefsHelper.isLoggedIn(getApplicationContext())){
             showProgress(true);
             mAuthTask = new UserLoginTask(
@@ -85,6 +103,8 @@ public class LoginActivity extends AppCompatActivity {
             mAuthTask.execute((Void) null);
         }
 
+        debugBox = (EditText)findViewById(R.id.debug_box);
+        debugBox.setVisibility(EditText.GONE);
     }
 
 
@@ -193,6 +213,7 @@ public class LoginActivity extends AppCompatActivity {
         private final String mEmail;
         private final String mPassword;
         private boolean connectionProblem;
+        private String connectionText;
 
         UserLoginTask(String server, String email, String password) {
             mServer = server;
@@ -204,6 +225,7 @@ public class LoginActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
 
             SharedPrefsHelper.saveToPrefs(SharedPrefsHelper.SERVER_PREFS, mServer, getApplicationContext());
+            SharedPrefsHelper.saveToPrefs(SharedPrefsHelper.LAST_SERVER_PREFS, mServer, getApplicationContext());
             SharedPrefsHelper.saveToPrefs(SharedPrefsHelper.PASSWORD_PREFS, mPassword, getApplicationContext());
             SharedPrefsHelper.saveToPrefs(SharedPrefsHelper.NAME_PREFS, mEmail, getApplicationContext());
 
@@ -218,6 +240,11 @@ public class LoginActivity extends AppCompatActivity {
                 loginResult = handler.makePostCall(parameter, handler.LINK_LOGIN);
             } catch (IOException e) {
                 connectionProblem = true;
+
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+                e.printStackTrace(pw);
+                connectionText = sw.toString();
                 return false;
             }
             Log.v("POST RESULT", loginResult);
@@ -238,6 +265,8 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 if(connectionProblem){
                     mPasswordView.setError(getString(R.string.error_network_problem));
+                    debugBox.setVisibility(View.VISIBLE);
+                    debugBox.setText(connectionText);
                 }else{
                     mPasswordView.setError(getString(R.string.error_incorrect_password));
                 }
@@ -260,7 +289,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     public class DownloadMrmartTask extends AsyncTask<Void, Void, Boolean> {
 
-
+        private String connectionText;
         private boolean connectionProblem;
 
         @Override
@@ -283,6 +312,10 @@ public class LoginActivity extends AppCompatActivity {
                 clientResult = handler.makeGetCall(handler.LINK_CUSTOMER_GET);
             } catch (IOException e) {
                 connectionProblem = true;
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+                e.printStackTrace(pw);
+                connectionText = sw.toString();
                 return false;
             }
             SharedPrefsHelper.saveToPrefs(SharedPrefsHelper.MFGART_PREFS,
@@ -310,6 +343,8 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 if(connectionProblem){
                     mPasswordView.setError(getString(R.string.error_network_problem));
+                    debugBox.setVisibility(View.VISIBLE);
+                    debugBox.setText(connectionText);
                 }else{
                     mPasswordView.setError(getString(R.string.error_incorrect_password));
                 }

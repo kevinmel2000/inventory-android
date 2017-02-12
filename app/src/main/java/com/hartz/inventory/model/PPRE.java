@@ -60,7 +60,7 @@ public class PPRE implements Serializable{
                     JSONObject mrmartobj = arr2.getJSONObject(j);
                     listMart.add(new Mrmart(mrmartobj.getString("PPRED_GROUP"), mrmartobj.getString("PPRED_ART"),
                             mrmartobj.getString("PPRED_ARTICLENAME"), mrmartobj.getInt("PPRED_QTY"),
-                            mrmartobj.getString("PPRED_SATUAN")
+                            mrmartobj.getString("PPRED_SATUAN"), mrmartobj.getString("PPRED_NOTE")
                             ));
                 }
                 PPRE ppre = new PPRE(jsonObj.getString("PPRE_DateTime"));
@@ -82,8 +82,11 @@ public class PPRE implements Serializable{
             sb.append(mrmart.getArticleName());
             sb.append(" ("+mrmart.getGroupID()+")");
             sb.append(" "+mrmart.getQuantity());
-            sb.append(" "+mrmart.getSatuan());
-            if(i != itemList.size()-1)sb.append("\r\n");
+
+            sb.append("\nCatatan: "+mrmart.getNote());
+            if(i != itemList.size()-1)sb.append("\r\n\r\n");
+
+
         }
         return sb.toString();
     }

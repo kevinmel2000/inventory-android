@@ -25,6 +25,8 @@ public class Mrmart implements Serializable{
     private String articleName;
     private int quantity;
     private String satuan;
+    private String note;
+
 
     public final static String MRMART_GROUPID = "PPRE_GROUP";
     public final static String MRMART_ARTICLEID = "PPRE_ART";
@@ -52,12 +54,21 @@ public class Mrmart implements Serializable{
      * @param quantity
      * @param satuan
      */
-    public Mrmart(String groupID, String articleID, String articleName, int quantity, String satuan) {
+    public Mrmart(String groupID, String articleID, String articleName, int quantity, String satuan, String note) {
         this.groupID = groupID;
         this.articleID = articleID;
         this.articleName = articleName;
         this.quantity = quantity;
         this.satuan = satuan;
+        this.note = note;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public int getQuantity() {

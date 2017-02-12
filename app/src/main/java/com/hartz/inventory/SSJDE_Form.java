@@ -153,21 +153,19 @@ public class SSJDE_Form extends AppCompatActivity{
         linearLayout.addView(itemLayout);
     }
 
-    protected void addRecord(View v){
+    public void addRecord(View v){
         Log.v("message", "add record pressed");
         addItem();
     }
 
-    protected void deleteRecord(View v){
-
+    public void deleteRecord(View v){
         Log.v("message", "delete record");
         int index = (int)v.getTag();
         relativeLayoutList.get(index).setVisibility(RelativeLayout.GONE);
 
     }
 
-    protected void submitRecord(View v){
-
+    public void submitRecord(View v){
         //validation of each entries
         boolean cancel = false;
 
@@ -176,8 +174,8 @@ public class SSJDE_Form extends AppCompatActivity{
             customerTextView.requestFocus();
         }
 
-        for(int i = 0; i < autoCompleteTextViewList.size(); i++){
-            if(autoCompleteTextViewList.get(i).getVisibility() != AutoCompleteTextView.GONE) {
+        for(int i = 0; i < relativeLayoutList.size(); i++){
+            if(relativeLayoutList.get(i).getVisibility() == AutoCompleteTextView.VISIBLE) {
                 if (mfgartList.get(i) == null) {
                     autoCompleteTextViewList.get(i).setError(getString(R.string.error_ppre_invalid_item));
                     autoCompleteTextViewList.get(i).requestFocus();
@@ -200,10 +198,10 @@ public class SSJDE_Form extends AppCompatActivity{
                 object.put("custid", selectedCustomer.getId());
                 JSONArray array = new JSONArray();
                 //for every item entry
-                for (int i = 0; i < mfgartList.size(); i++) {
+                for (int i = 0; i < relativeLayoutList.size(); i++) {
                     //if the component is visible (not deleted)
-                    if (autoCompleteTextViewList.get(i).getVisibility() !=
-                            AutoCompleteTextView.GONE) {
+                    if (relativeLayoutList.get(i).getVisibility() ==
+                            View.VISIBLE) {
                         //jika sudah ada item yang dipilih
                         if (mfgartList.get(i) != null) {
                             JSONObject entry = new JSONObject();

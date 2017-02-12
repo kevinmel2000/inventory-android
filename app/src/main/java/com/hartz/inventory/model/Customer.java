@@ -46,7 +46,7 @@ public class Customer implements Serializable{
 
     @Override
     public String toString() {
-        return getName();
+        return getName()+" - "+getId();
     }
 
     public static ArrayList<Customer> getListFromPrefs(Context applicationContext) {

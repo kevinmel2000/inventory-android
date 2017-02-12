@@ -33,25 +33,26 @@
             android:layout_height="wrap_content"
             android:text="Daftar Pengiriman Barang"
             android:textStyle="bold"
-            android:textSize="18sp"
-            android:gravity="left"
+            android:textSize="22sp"
+            android:gravity="center"
             android:paddingLeft="5dp"
             android:paddingBottom="4dp"
             android:textColor="#ff0099cc"
             />
+
+
+
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:paddingBottom="5dp"
-            android:background="#2233bb"/>
-
+            android:background="#72B0D9"
+            android:layout_marginBottom="5dp"
+            />
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/fragment_ssjde_listview">
         </ListView>
-
-
     </LinearLayout>
 
 </LinearLayout>

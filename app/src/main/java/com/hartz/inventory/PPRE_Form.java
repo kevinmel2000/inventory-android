@@ -42,6 +42,7 @@ public class PPRE_Form extends AppCompatActivity {
     ArrayList<AutoCompleteTextView> autoCompleteTextViewList;
     ArrayList<Spinner> spinnerList;
     ArrayList<EditText> editTextList;
+    ArrayList<EditText> editTextNoteList;
     ArrayList<RelativeLayout> relativeLayoutList;
     LinearLayout linearLayout;
 
@@ -67,6 +68,7 @@ public class PPRE_Form extends AppCompatActivity {
         spinnerList = new ArrayList<Spinner>();
         relativeLayoutList = new ArrayList<RelativeLayout>();
         editTextList = new ArrayList<EditText>();
+        editTextNoteList = new ArrayList<EditText>();
         mrMartList = new ArrayList<Mrmart>();
 
 
@@ -120,28 +122,27 @@ public class PPRE_Form extends AppCompatActivity {
         EditText editText = (EditText) itemLayout.findViewById(R.id.ppre_form_edittext1);
         editTextList.add(editText);
 
+        EditText editText1 = (EditText) itemLayout.findViewById(R.id.ppre_form_note);
+        editTextNoteList.add(editText1);
+
         linearLayout.addView(itemLayout);
     }
 
-    protected void addRecord(View v){
-        Log.v("message", "add record pressed");
+    public void addRecord(View v){
         addItem();
     }
 
-    protected void deleteRecord(View v){
-
-        Log.v("message", "delete record");
+    public void deleteRecord(View v){
         int index = (int)v.getTag();
         relativeLayoutList.get(index).setVisibility(RelativeLayout.GONE);
 
     }
 
-    protected void submitRecord(View v){
-
+    public void submitRecord(View v){
         //validation of each entries
         boolean cancel = false;
-        for(int i = 0; i < autoCompleteTextViewList.size(); i++){
-            if(autoCompleteTextViewList.get(i).getVisibility() != AutoCompleteTextView.GONE) {
+        for(int i = 0; i < relativeLayoutList.size(); i++){
+            if(relativeLayoutList.get(i).getVisibility() == AutoCompleteTextView.VISIBLE) {
                 if (mrMartList.get(i) == null) {
                     autoCompleteTextViewList.get(i).setError(getString(R.string.error_ppre_invalid_item));
                     autoCompleteTextViewList.get(i).requestFocus();
@@ -163,15 +164,16 @@ public class PPRE_Form extends AppCompatActivity {
 
                 JSONArray array = new JSONArray();
                 //for every item entry
-                for (int i = 0; i < mrMartList.size(); i++) {
+                for (int i = 0; i < relativeLayoutList.size(); i++) {
                     //if the component is visible (not deleted)
-                    if (autoCompleteTextViewList.get(i).getVisibility() != AutoCompleteTextView.GONE) {
+                    if (relativeLayoutList.get(i).getVisibility() == View.GONE) {
                         //jika sudah ada item yang dipilih
                         if (mrMartList.get(i) != null) {
                             JSONObject entry = new JSONObject();
                             entry.put(Mrmart.MRMART_ARTICLEID, mrMartList.get(i).getArticleID());
                             entry.put(Mrmart.MRMART_GROUPID, mrMartList.get(i).getGroupID());
                             entry.put(Mrmart.MRMART_QUANTITY, editTextList.get(i).getText());
+                            entry.put(Mrmart.MRMART_NOTE, editTextNoteList.get(i).getText());
                             Satuan s = (Satuan) spinnerList.get(i).getSelectedItem();
                             entry.put(Mrmart.MRMART_SATUAN, s.getSatuanID());
                             array.put(entry);
@@ -227,6 +229,7 @@ public class PPRE_Form extends AppCompatActivity {
         }
     }
 
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -270,17 +273,9 @@ public class PPRE_Form extends AppCompatActivity {
             if (success) {
                 Toast.makeText(getApplicationContext(), "Permintaan Pembelian Ditambahkan",Toast.LENGTH_SHORT).show();
                 finish();
+            } else {
+                Toast.makeText(getApplicationContext(), "Gagal menambahkan data",Toast.LENGTH_SHORT).show();
             }
-            //TODO jika gagal
-//            } else {
-//                if(connectionProblem){
-//                    mPasswordView.setError(getString(R.string.error_network_problem));
-//                }else{
-//                    mPasswordView.setError(getString(R.string.error_incorrect_password));
-//                }
-//
-//                mPasswordView.requestFocus();
-//            }
         }
 
         @Override
